@@ -287,44 +287,6 @@ app.get('/api/crypto', async (req, res) => {
   res.json(out);
 });
 
-// ---- Yahoo profile (sector / industry / business summary) ----
-app.get('/api/profile', async (req, res) => {
-  const symbol = String(req.query.symbol || '').trim();
-  if (!symbol) return res.status(400).json({ error: 'symbol required' });
-
-  const cacheKey = 'profile:' + symbol;
-  const cached = cacheGet(cacheKey, 6 * 3600_000);
-  if (cached) return res.json(cached);
-
-  try {
-    const out = await withRetry(async () => {
-      const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(
-        symbol
-      )}?modules=assetProfile,price`;
-      const r = await fetch(url, { headers: HEADERS });
-      if (!r.ok) throw new Error(`yahoo profile ${r.status}`);
-      const json = await r.json();
-      const result = json?.quoteSummary?.result?.[0];
-      const profile = result?.assetProfile;
-      const priceInfo = result?.price;
-      if (!profile && !priceInfo) throw new Error('no profile');
-      return {
-        symbol,
-        longName: priceInfo?.longName ?? priceInfo?.shortName ?? null,
-        sector: profile?.sector ?? null,
-        industry: profile?.industry ?? null,
-        summary: profile?.longBusinessSummary ?? null,
-        website: profile?.website ?? null,
-        country: profile?.country ?? null,
-      };
-    });
-    cacheSet(cacheKey, out);
-    res.json(out);
-  } catch (e) {
-    res.json({ symbol, unavailable: true });
-  }
-});
-
 // ---- price history for chart (stocks) ----
 // timeframe: hour | day | week | month  (see RANGE_PRESETS)
 app.get('/api/history', async (req, res) => {

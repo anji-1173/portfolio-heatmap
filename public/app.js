@@ -252,7 +252,7 @@ async function openDetail(h) {
     </div>
     <canvas id="detailChart"></canvas>
     <div class="section-title">企業概要</div>
-    <div class="summary" id="profileText">${h.note || '読み込み中...'}</div>
+    <div class="summary" id="profileText">${companyOverviewText(h)}</div>
   `;
 
   if (detailChart) {
@@ -262,9 +262,19 @@ async function openDetail(h) {
 
   if (h.ticker) {
     loadChart(h, currentTimeframe);
-    if (h.type !== 'crypto') loadProfile(h);
-    else document.getElementById('profileText').textContent = '暗号資産のため企業概要はありません。';
   }
+}
+
+// company overviews are shipped as static text in holdings.json rather
+// than fetched live: Yahoo's endpoint for this needs a session
+// cookie/crumb we don't have and was failing silently for every stock
+function companyOverviewText(h) {
+  if (h.type === 'crypto') return '暗号資産のため企業概要はありません。';
+  const parts = [];
+  if (h.sector) parts.push(`業種: ${h.sector}`);
+  if (h.summary) parts.push(h.summary);
+  else if (h.note) parts.push(h.note);
+  return parts.length ? parts.join('\n\n') : '概要は未登録です。';
 }
 
 detailContent.addEventListener('click', (e) => {
@@ -332,25 +342,6 @@ async function loadChart(h, timeframe) {
     });
   } catch (e) {
     /* ignore */
-  }
-}
-
-async function loadProfile(h) {
-  const el = document.getElementById('profileText');
-  try {
-    const r = await fetch(`/api/profile?symbol=${encodeURIComponent(h.ticker)}`);
-    const data = await r.json();
-    if (data.unavailable || (!data.summary && !data.sector)) {
-      el.textContent = '企業概要は取得できませんでした。';
-      return;
-    }
-    const parts = [];
-    if (data.sector) parts.push(`業種: ${data.sector}`);
-    if (data.industry) parts.push(`分野: ${data.industry}`);
-    if (data.summary) parts.push(data.summary);
-    el.textContent = parts.join('\n\n');
-  } catch (e) {
-    el.textContent = '企業概要は取得できませんでした。';
   }
 }
 
