@@ -262,6 +262,17 @@ main {
   white-space: nowrap;
 }
 
+.fund-table .fund-link a {
+  color: var(--accent);
+  font-size: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.fund-table .fund-link a:hover {
+  text-decoration: underline;
+}
+
 .fund-intro {
   grid-column: 1 / -1;
   color: var(--muted);

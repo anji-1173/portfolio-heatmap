@@ -193,7 +193,14 @@ function renderFundTable() {
   const rows = [...byAccount.entries()]
     .map(([account, names]) => {
       const nameRows = names
-        .map((n) => `<tr><td class="fund-name">${n}</td><td class="fund-account">${account}</td></tr>`)
+        .map((n) => {
+          const query = encodeURIComponent(`${n} 基準価額`);
+          return `<tr>
+            <td class="fund-name">${n}</td>
+            <td class="fund-account">${account}</td>
+            <td class="fund-link"><a href="https://www.google.com/search?q=${query}" target="_blank" rel="noopener noreferrer">詳しく見る ↗</a></td>
+          </tr>`;
+        })
         .join('');
       return nameRows;
     })
@@ -202,11 +209,11 @@ function renderFundTable() {
   heatmapEl.innerHTML = `
     <p class="fund-intro">
       投資信託(ファンド)は、株や暗号資産のようなリアルタイム価格を毎日は公表していないため、
-      ここでは「何を」「どの口座で」保有しているかの一覧のみを表示しています。
+      ここでは「何を」「どの口座で」保有しているかの一覧と、基準価額を調べるための検索リンクを表示しています。
     </p>
     <table class="fund-table">
       <thead>
-        <tr><th>ファンド名</th><th>保有口座</th></tr>
+        <tr><th>ファンド名</th><th>保有口座</th><th>詳細</th></tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>
