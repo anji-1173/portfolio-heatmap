@@ -177,7 +177,8 @@ main {
   font-weight: 600;
 }
 
-/* box size scales with how big the day's move is */
+/* box size scales with market cap, ranked (log scale) within whichever
+   set of tiles it's shown alongside */
 .tile.size-md {
   grid-column: span 2;
 }
@@ -187,13 +188,27 @@ main {
   grid-row: span 2;
 }
 
+.tile.size-xl {
+  grid-column: span 3;
+  grid-row: span 3;
+}
+
 .tile.size-md .symbol,
-.tile.size-lg .symbol {
+.tile.size-lg .symbol,
+.tile.size-xl .symbol {
   font-size: 16px;
 }
 
 .tile.size-lg .pct {
   font-size: 18px;
+}
+
+.tile.size-xl .symbol {
+  font-size: 22px;
+}
+
+.tile.size-xl .pct {
+  font-size: 24px;
 }
 
 .sector-section {

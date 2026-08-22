@@ -78,16 +78,16 @@ async function loadQuotesFor(type) {
 }
 
 // bigger companies/coins get a bigger box, like a classic market heatmap.
-// Uses a hand-classified size tier shipped with the holdings data rather
-// than a live market-cap lookup, since every free live source for this
-// turned out to be unreliable from a hosted server.
-const TIER_SIZE_CLASS = { 3: 'size-lg', 2: 'size-md' };
-
+// Uses an approximate static market cap (USD) shipped with the holdings
+// data rather than a live lookup, since every free live source for this
+// turned out to be unreliable from a hosted server. Sized by rank within
+// whichever group of tiles it's rendered alongside (see applySizeForTiles),
+// on a log scale so a ~$2T name and a ~$300B name don't look the same.
 function createTile(h) {
   const tile = document.createElement('div');
-  const sizeClass = TIER_SIZE_CLASS[h.capTier] || '';
-  tile.className = `tile loading ${sizeClass}`.trim();
+  tile.className = 'tile loading';
   tile.dataset.key = h.ticker || h.name;
+  if (h.capUsdB) tile.dataset.cap = h.capUsdB;
   tile.innerHTML = `
     <div class="symbol">${h.symbol || h.name}</div>
     <div class="name">${h.name}</div>
@@ -95,6 +95,30 @@ function createTile(h) {
   `;
   tile.addEventListener('click', () => openDetail(h));
   return tile;
+}
+
+const SIZE_CLASSES = ['size-md', 'size-lg', 'size-xl'];
+
+function applySizeForTiles(tiles) {
+  const withCap = tiles
+    .map((tile) => ({ tile, cap: parseFloat(tile.dataset.cap) }))
+    .filter((t) => !Number.isNaN(t.cap) && t.cap > 0);
+  tiles.forEach((tile) => tile.classList.remove(...SIZE_CLASSES));
+  if (withCap.length < 2) return;
+
+  const logs = withCap.map((t) => Math.log10(t.cap));
+  const min = Math.min(...logs);
+  const max = Math.max(...logs);
+  if (max === min) return;
+
+  withCap.forEach(({ tile, cap }, i) => {
+    const t = (logs[i] - min) / (max - min); // 0..1, log-scaled rank
+    let sizeClass = '';
+    if (t >= 0.85) sizeClass = 'size-xl';
+    else if (t >= 0.6) sizeClass = 'size-lg';
+    else if (t >= 0.35) sizeClass = 'size-md';
+    if (sizeClass) tile.classList.add(sizeClass);
+  });
 }
 
 function render() {
@@ -110,9 +134,12 @@ function render() {
   heatmapEl.classList.remove('stacked');
   const items = holdings.filter((h) => h.type === currentType);
   heatmapEl.innerHTML = '';
-  for (const h of items) {
-    heatmapEl.appendChild(createTile(h));
-  }
+  const tiles = items.map((h) => {
+    const tile = createTile(h);
+    heatmapEl.appendChild(tile);
+    return tile;
+  });
+  applySizeForTiles(tiles);
   loadQuotesFor(currentType).then(paintTiles);
 }
 
@@ -134,9 +161,12 @@ function renderBySector() {
     title.textContent = `${sector} (${list.length})`;
     const grid = document.createElement('div');
     grid.className = 'sector-heatmap';
-    for (const h of list) {
-      grid.appendChild(createTile(h));
-    }
+    const tiles = list.map((h) => {
+      const tile = createTile(h);
+      grid.appendChild(tile);
+      return tile;
+    });
+    applySizeForTiles(tiles);
     section.appendChild(title);
     section.appendChild(grid);
     heatmapEl.appendChild(section);
