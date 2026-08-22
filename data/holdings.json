@@ -1,0 +1,1730 @@
+[
+  {
+    "name": "225投信",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "SPDRｺﾞｰﾙﾄﾞ",
+    "type": "jp_stock",
+    "ticker": "1326.T",
+    "symbol": "1326",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＮＥＸＴ　ＦＵＮＤＳ　インド株式指数・Ｎｉｆｔｙ　５０連動型上場投信",
+    "type": "jp_stock",
+    "ticker": "1678.T",
+    "symbol": "1678",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "三井住友・日本債券インデックス・ファンド",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "三井住友・DC外国債券ｲﾝﾃﾞｯｸｽﾌｧﾝﾄﾞ",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ニッセイ外国株式ｲﾝﾃﾞｯｸｽﾌｧﾝﾄﾞ",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＳＢＩ－ＳＢＩ・バンガード・Ｓ＆Ｐ５００インデックス・ファンド",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＳＢＩ－ＳＢＩ・Ｖ・全米株式インデックス・ファンド",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＳＭＴ　Ｊ-ＲＥＩＴｲﾝﾃﾞｯｸｽ・ｵｰﾌﾟﾝ",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "パーソルＨＤ",
+    "type": "jp_stock",
+    "ticker": "2181.T",
+    "symbol": "2181",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "キリンＨＤ",
+    "type": "jp_stock",
+    "ticker": "2503.T",
+    "symbol": "2503",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "円谷フィールズＨＤ",
+    "type": "jp_stock",
+    "ticker": "2767.T",
+    "symbol": "2767",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "すかいらーくＨＤ",
+    "type": "jp_stock",
+    "ticker": "3197.T",
+    "symbol": "3197",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "菊池製作所",
+    "type": "jp_stock",
+    "ticker": "3444.T",
+    "symbol": "3444",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "力の源ＨＤ",
+    "type": "jp_stock",
+    "ticker": "3561.T",
+    "symbol": "3561",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "オリオンビール",
+    "type": "jp_stock",
+    "ticker": null,
+    "symbol": null,
+    "note": "非上場のため価格取得不可",
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アンジェス",
+    "type": "jp_stock",
+    "ticker": "4563.T",
+    "symbol": "4563",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "サイバーエージェント",
+    "type": "jp_stock",
+    "ticker": "4751.T",
+    "symbol": "4751",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ハーモニック",
+    "type": "jp_stock",
+    "ticker": "6629.T",
+    "symbol": "6629",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＮＴＮ",
+    "type": "jp_stock",
+    "ticker": "6472.T",
+    "symbol": "6472",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券",
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "日信号",
+    "type": "jp_stock",
+    "ticker": "6741.T",
+    "symbol": "6741",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "パナソニックＨＤ",
+    "type": "jp_stock",
+    "ticker": "6752.T",
+    "symbol": "6752",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ソニーグループ",
+    "type": "jp_stock",
+    "ticker": "6758.T",
+    "symbol": "6758",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "村田製",
+    "type": "jp_stock",
+    "ticker": "6981.T",
+    "symbol": "6981",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "三菱重",
+    "type": "jp_stock",
+    "ticker": "7011.T",
+    "symbol": "7011",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "壱番屋",
+    "type": "jp_stock",
+    "ticker": "7630.T",
+    "symbol": "7630",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "シチズン時計",
+    "type": "jp_stock",
+    "ticker": "7762.T",
+    "symbol": "7762",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ソニーＦＧ",
+    "type": "jp_stock",
+    "ticker": "8729.T",
+    "symbol": "8729",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ｉｓｐａｃｅ",
+    "type": "jp_stock",
+    "ticker": "9348.T",
+    "symbol": "9348",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＮＴＴ",
+    "type": "jp_stock",
+    "ticker": "9432.T",
+    "symbol": "9432",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券",
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "吉野家ＨＤ",
+    "type": "jp_stock",
+    "ticker": "9861.T",
+    "symbol": "9861",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "三菱ＵＦＪ－ｅＭＡＸＩＳ　インド株式インデックス",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "三菱ＵＦＪ－ｅＭＡＸＩＳ　Ｓｌｉｍ　全世界株式（オール・カントリー）",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "レオス－ひふみクロスオーバーｐｒｏ",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アップル",
+    "type": "us_stock",
+    "ticker": "AAPL",
+    "symbol": "AAPL",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アドバンスト マイクロ デバイシズ",
+    "type": "us_stock",
+    "ticker": "AMD",
+    "symbol": "AMD",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アマゾン ドットコム",
+    "type": "us_stock",
+    "ticker": "AMZN",
+    "symbol": "AMZN",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ブロードコム",
+    "type": "us_stock",
+    "ticker": "AVGO",
+    "symbol": "AVGO",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "バイオエヌテック ADR",
+    "type": "us_stock",
+    "ticker": "BNTX",
+    "symbol": "BNTX",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ビヨンド ミート",
+    "type": "us_stock",
+    "ticker": "BYND",
+    "symbol": "BYND",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "メイプルベア インク",
+    "type": "us_stock",
+    "ticker": null,
+    "symbol": null,
+    "note": "非上場のため価格取得不可",
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "コルゲート パルモリーブ",
+    "type": "us_stock",
+    "ticker": "CL",
+    "symbol": "CL",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "CRISPRセラピューティクス",
+    "type": "us_stock",
+    "ticker": "CRSP",
+    "symbol": "CRSP",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "デクスコム",
+    "type": "us_stock",
+    "ticker": "DXCM",
+    "symbol": "DXCM",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アルファベット A",
+    "type": "us_stock",
+    "ticker": "GOOGL",
+    "symbol": "GOOGL",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ヒムズ&ハーズヘルス",
+    "type": "us_stock",
+    "ticker": "HIMS",
+    "symbol": "HIMS",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ロビンフッド マーケッツ",
+    "type": "us_stock",
+    "ticker": "HOOD",
+    "symbol": "HOOD",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "インテル",
+    "type": "us_stock",
+    "ticker": "INTC",
+    "symbol": "INTC",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "コカ-コーラ",
+    "type": "us_stock",
+    "ticker": "KO",
+    "symbol": "KO",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "モンダリーズ インターナショナル",
+    "type": "us_stock",
+    "ticker": "MDLZ",
+    "symbol": "MDLZ",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アルトリア グループ",
+    "type": "us_stock",
+    "ticker": "MO",
+    "symbol": "MO",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "モデルナ",
+    "type": "us_stock",
+    "ticker": "MRNA",
+    "symbol": "MRNA",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "マイクロソフト",
+    "type": "us_stock",
+    "ticker": "MSFT",
+    "symbol": "MSFT",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ネットフリックス",
+    "type": "us_stock",
+    "ticker": "NFLX",
+    "symbol": "NFLX",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ナイキ B",
+    "type": "us_stock",
+    "ticker": "NKE",
+    "symbol": "NKE",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "エヌビディア",
+    "type": "us_stock",
+    "ticker": "NVDA",
+    "symbol": "NVDA",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ノボノルディスク ADR",
+    "type": "us_stock",
+    "ticker": "NVO",
+    "symbol": "NVO",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "オクロ A",
+    "type": "us_stock",
+    "ticker": "OKLO",
+    "symbol": "OKLO",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ペプシコ",
+    "type": "us_stock",
+    "ticker": "PEP",
+    "symbol": "PEP",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ファイザー",
+    "type": "us_stock",
+    "ticker": "PFE",
+    "symbol": "PFE",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "プロクター & ギャンブル",
+    "type": "us_stock",
+    "ticker": "PG",
+    "symbol": "PG",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "クアルコム",
+    "type": "us_stock",
+    "ticker": "QCOM",
+    "symbol": "QCOM",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "リビアン オートモーティブ",
+    "type": "us_stock",
+    "ticker": "RIVN",
+    "symbol": "RIVN",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "サザン",
+    "type": "us_stock",
+    "ticker": "SO",
+    "symbol": "SO",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "スポティファイ テクノロジー SA",
+    "type": "us_stock",
+    "ticker": "SPOT",
+    "symbol": "SPOT",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ソシエダードキミカイミネラデチリ ADR",
+    "type": "us_stock",
+    "ticker": "SQM",
+    "symbol": "SQM",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "テスラ",
+    "type": "us_stock",
+    "ticker": "TSLA",
+    "symbol": "TSLA",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "台湾セミコンダクター ADR",
+    "type": "us_stock",
+    "ticker": "TSM",
+    "symbol": "TSM",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ビザ A",
+    "type": "us_stock",
+    "ticker": "V",
+    "symbol": "V",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ビストラ",
+    "type": "us_stock",
+    "ticker": "VST",
+    "symbol": "VST",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ベライゾン コミュニケーションズ",
+    "type": "us_stock",
+    "ticker": "VZ",
+    "symbol": "VZ",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ウォルマート インク",
+    "type": "us_stock",
+    "ticker": "WMT",
+    "symbol": "WMT",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＳＢＩ－ＳＢＩ・Ｖ・Ｓ＆Ｐ５００インデックス・ファンド",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "三菱ＵＦＪ国際－ｅＭＡＸＩＳ　Ｓｌｉｍ　全世界株式（除く日本）",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ニッセイ－ニッセイ日経２２５インデックスファンド",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "フォーサイド（ｷｬｯｼｭﾚｽ関連）",
+    "type": "jp_stock",
+    "ticker": "2330.T",
+    "symbol": "2330",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ディーエヌエー",
+    "type": "jp_stock",
+    "ticker": "2432.T",
+    "symbol": "2432",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "キッコマン",
+    "type": "jp_stock",
+    "ticker": "2801.T",
+    "symbol": "2801",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "旭化成",
+    "type": "jp_stock",
+    "ticker": "3407.T",
+    "symbol": "3407",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "Ｆ＆ＬＣ（スシロー）",
+    "type": "jp_stock",
+    "ticker": "3563.T",
+    "symbol": "3563",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "フィスコ（ﾌﾞﾛｯｸﾁｪｰﾝ関連）",
+    "type": "jp_stock",
+    "ticker": "3807.T",
+    "symbol": "3807",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "大王紙",
+    "type": "jp_stock",
+    "ticker": "3880.T",
+    "symbol": "3880",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ソフト９９",
+    "type": "jp_stock",
+    "ticker": "4464.T",
+    "symbol": "4464",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "日本製鉄",
+    "type": "jp_stock",
+    "ticker": "5401.T",
+    "symbol": "5401",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＳＡＫＩＧＡＫＥ",
+    "type": "jp_stock",
+    "ticker": null,
+    "symbol": null,
+    "note": "銘柄特定不可のため価格取得不可",
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＬＩＸＩＬ",
+    "type": "jp_stock",
+    "ticker": "5938.T",
+    "symbol": "5938",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ＪＶＣＫＷ　ﾋﾞｸﾀｰ・ｹﾝｳｯﾄﾞ（自動運転関連）",
+    "type": "jp_stock",
+    "ticker": "6632.T",
+    "symbol": "6632",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "カシオ計",
+    "type": "jp_stock",
+    "ticker": "6952.T",
+    "symbol": "6952",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "島津製",
+    "type": "jp_stock",
+    "ticker": "7701.T",
+    "symbol": "7701",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "丸紅",
+    "type": "jp_stock",
+    "ticker": "8002.T",
+    "symbol": "8002",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "リンガーハット",
+    "type": "jp_stock",
+    "ticker": "8200.T",
+    "symbol": "8200",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "三菱UFJ",
+    "type": "jp_stock",
+    "ticker": "8306.T",
+    "symbol": "8306",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "みずほFG",
+    "type": "jp_stock",
+    "ticker": "8411.T",
+    "symbol": "8411",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アコム",
+    "type": "jp_stock",
+    "ticker": "8572.T",
+    "symbol": "8572",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ソフトバンク",
+    "type": "jp_stock",
+    "ticker": "9434.T",
+    "symbol": "9434",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "東電力ＨＤ",
+    "type": "jp_stock",
+    "ticker": "9501.T",
+    "symbol": "9501",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アプライド マテリアルズ",
+    "type": "us_stock",
+    "ticker": "AMAT",
+    "symbol": "AMAT",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アンビック マイクロ",
+    "type": "us_stock",
+    "ticker": null,
+    "symbol": null,
+    "note": "銘柄特定不可のため価格取得不可",
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アーム ホールディングス",
+    "type": "us_stock",
+    "ticker": "ARM",
+    "symbol": "ARM",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "アメリカン ステーツ ウォーター",
+    "type": "us_stock",
+    "ticker": "AWR",
+    "symbol": "AWR",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ボーイング",
+    "type": "us_stock",
+    "ticker": "BA",
+    "symbol": "BA",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ブンゲ",
+    "type": "us_stock",
+    "ticker": "BG",
+    "symbol": "BG",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "シティグループ",
+    "type": "us_stock",
+    "ticker": "C",
+    "symbol": "C",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "カーニバル",
+    "type": "us_stock",
+    "ticker": "CCL",
+    "symbol": "CCL",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "コインベース　グローバル",
+    "type": "us_stock",
+    "ticker": "COIN",
+    "symbol": "COIN",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "クロノス グループ",
+    "type": "us_stock",
+    "ticker": "CRON",
+    "symbol": "CRON",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ウォルト ディズニー",
+    "type": "us_stock",
+    "ticker": "DIS",
+    "symbol": "DIS",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ラウンドヒル メモリー ETF",
+    "type": "us_stock",
+    "ticker": null,
+    "symbol": null,
+    "note": "銘柄特定不可のため価格取得不可",
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "エコペトロール ADR",
+    "type": "us_stock",
+    "ticker": "EC",
+    "symbol": "EC",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "イーハン ホールディングス",
+    "type": "us_stock",
+    "ticker": "EH",
+    "symbol": "EH",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ファーストエナジー",
+    "type": "us_stock",
+    "ticker": "FE",
+    "symbol": "FE",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "フラワーズ フーズ",
+    "type": "us_stock",
+    "ticker": "FLO",
+    "symbol": "FLO",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "フォーティス",
+    "type": "us_stock",
+    "ticker": "FTS",
+    "symbol": "FTS",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ヒューレット パッカード エンタープライズ",
+    "type": "us_stock",
+    "ticker": "HPE",
+    "symbol": "HPE",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "インターナショナル ビジネス マシーンズ",
+    "type": "us_stock",
+    "ticker": "IBM",
+    "symbol": "IBM",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ジョンソン & ジョンソン",
+    "type": "us_stock",
+    "ticker": "JNJ",
+    "symbol": "JNJ",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "リーバイ ストラウス A",
+    "type": "us_stock",
+    "ticker": "LEVI",
+    "symbol": "LEVI",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "イーライ リリィ",
+    "type": "us_stock",
+    "ticker": "LLY",
+    "symbol": "LLY",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "レモネード",
+    "type": "us_stock",
+    "ticker": "LMND",
+    "symbol": "LMND",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "モービルアイ グローバル",
+    "type": "us_stock",
+    "ticker": "MBLY",
+    "symbol": "MBLY",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "マクドナルド",
+    "type": "us_stock",
+    "ticker": "MCD",
+    "symbol": "MCD",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "メタ プラットフォームズ A(フェイスブック A)",
+    "type": "us_stock",
+    "ticker": "META",
+    "symbol": "META",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "パランティア テクノロジーズ A",
+    "type": "us_stock",
+    "ticker": "PLTR",
+    "symbol": "PLTR",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "レイセオン テクノロジーズ",
+    "type": "us_stock",
+    "ticker": "RTX",
+    "symbol": "RTX",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "スターバックス",
+    "type": "us_stock",
+    "ticker": "SBUX",
+    "symbol": "SBUX",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "スーパー マイクロ コンピューター",
+    "type": "us_stock",
+    "ticker": "SMCI",
+    "symbol": "SMCI",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ストラタ クリティカル メディカル A",
+    "type": "us_stock",
+    "ticker": null,
+    "symbol": null,
+    "note": "銘柄特定不可のため価格取得不可",
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ウーバー テクノロジーズ",
+    "type": "us_stock",
+    "ticker": "UBER",
+    "symbol": "UBER",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "US バンコープ",
+    "type": "us_stock",
+    "ticker": "USB",
+    "symbol": "USB",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ワーナーミュージックグループ",
+    "type": "us_stock",
+    "ticker": "WMG",
+    "symbol": "WMG",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ズーム ビデオ コミュニケーションズ",
+    "type": "us_stock",
+    "ticker": "ZM",
+    "symbol": "ZM",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ユーロナブ",
+    "type": "us_stock",
+    "ticker": null,
+    "symbol": null,
+    "note": "再編に伴い価格取得不可",
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "AT&T",
+    "type": "us_stock",
+    "ticker": "T",
+    "symbol": "T",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ワーナー ブラザース ディスカバリ",
+    "type": "us_stock",
+    "ticker": "WBD",
+    "symbol": "WBD",
+    "note": null,
+    "accounts": [
+      "ＳＢＩ証券"
+    ]
+  },
+  {
+    "name": "ビットコイン",
+    "type": "crypto",
+    "ticker": "bitcoin",
+    "symbol": "BTC",
+    "note": null,
+    "accounts": [
+      "GMOコイン",
+      "BINANCE"
+    ]
+  },
+  {
+    "name": "イーサリアム",
+    "type": "crypto",
+    "ticker": "ethereum",
+    "symbol": "ETH",
+    "note": null,
+    "accounts": [
+      "GMOコイン",
+      "メタマスク",
+      "メタマスク（保管用）"
+    ]
+  },
+  {
+    "name": "ビットコインキャッシュ",
+    "type": "crypto",
+    "ticker": "bitcoin-cash",
+    "symbol": "BCH",
+    "note": null,
+    "accounts": [
+      "GMOコイン"
+    ]
+  },
+  {
+    "name": "ライトコイン",
+    "type": "crypto",
+    "ticker": "litecoin",
+    "symbol": "LTC",
+    "note": null,
+    "accounts": [
+      "GMOコイン"
+    ]
+  },
+  {
+    "name": "リップル",
+    "type": "crypto",
+    "ticker": "ripple",
+    "symbol": "XRP",
+    "note": null,
+    "accounts": [
+      "GMOコイン",
+      "BINANCE"
+    ]
+  },
+  {
+    "name": "ステラルーメン",
+    "type": "crypto",
+    "ticker": "stellar",
+    "symbol": "XLM",
+    "note": null,
+    "accounts": [
+      "GMOコイン"
+    ]
+  },
+  {
+    "name": "ポルカドット",
+    "type": "crypto",
+    "ticker": "polkadot",
+    "symbol": "DOT",
+    "note": null,
+    "accounts": [
+      "GMOコイン"
+    ]
+  },
+  {
+    "name": "コスモス",
+    "type": "crypto",
+    "ticker": "cosmos",
+    "symbol": "ATOM",
+    "note": null,
+    "accounts": [
+      "GMOコイン"
+    ]
+  },
+  {
+    "name": "FCRコイン",
+    "type": "crypto",
+    "ticker": null,
+    "symbol": null,
+    "note": "価格取得未対応",
+    "accounts": [
+      "GMOコイン"
+    ]
+  },
+  {
+    "name": "カルダノ",
+    "type": "crypto",
+    "ticker": "cardano",
+    "symbol": "ADA",
+    "note": null,
+    "accounts": [
+      "GMOコイン"
+    ]
+  },
+  {
+    "name": "チェーンリンク",
+    "type": "crypto",
+    "ticker": "chainlink",
+    "symbol": "LINK",
+    "note": null,
+    "accounts": [
+      "GMOコイン"
+    ]
+  },
+  {
+    "name": "ドージコイン",
+    "type": "crypto",
+    "ticker": "dogecoin",
+    "symbol": "DOGE",
+    "note": null,
+    "accounts": [
+      "GMOコイン",
+      "BINANCE"
+    ]
+  },
+  {
+    "name": "FSCC（フィスココイン）",
+    "type": "crypto",
+    "ticker": null,
+    "symbol": null,
+    "note": "価格取得未対応",
+    "accounts": [
+      "Zaif"
+    ]
+  },
+  {
+    "name": "SHIBA INU",
+    "type": "crypto",
+    "ticker": "shiba-inu",
+    "symbol": "SHIB",
+    "note": null,
+    "accounts": [
+      "BINANCE"
+    ]
+  },
+  {
+    "name": "Polygon",
+    "type": "crypto",
+    "ticker": "matic-network",
+    "symbol": "MATIC",
+    "note": null,
+    "accounts": [
+      "BINANCE",
+      "メタマスク"
+    ]
+  },
+  {
+    "name": "BNB",
+    "type": "crypto",
+    "ticker": "binancecoin",
+    "symbol": "BNB",
+    "note": null,
+    "accounts": [
+      "メタマスク"
+    ]
+  },
+  {
+    "name": "WETH(MATIC)",
+    "type": "crypto",
+    "ticker": "weth",
+    "symbol": "WETH",
+    "note": null,
+    "accounts": [
+      "メタマスク"
+    ]
+  },
+  {
+    "name": "Cake",
+    "type": "crypto",
+    "ticker": "pancakeswap-token",
+    "symbol": "CAKE",
+    "note": null,
+    "accounts": [
+      "メタマスク"
+    ]
+  },
+  {
+    "name": "ＮＦＮＯＭＵＲＡ原油",
+    "type": "jp_stock",
+    "ticker": "1699.T",
+    "symbol": "1699",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "アジアゲートＨＬＤ",
+    "type": "jp_stock",
+    "ticker": "3491.T",
+    "symbol": "3491",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "イメージワン",
+    "type": "jp_stock",
+    "ticker": "2667.T",
+    "symbol": "2667",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "日本軽金属HD",
+    "type": "jp_stock",
+    "ticker": "5703.T",
+    "symbol": "5703",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "鎌倉新書",
+    "type": "jp_stock",
+    "ticker": "6184.T",
+    "symbol": "6184",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "イーグル工業",
+    "type": "jp_stock",
+    "ticker": "6486.T",
+    "symbol": "6486",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "ＴＤＫ",
+    "type": "jp_stock",
+    "ticker": "6762.T",
+    "symbol": "6762",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "トヨタ自動車",
+    "type": "jp_stock",
+    "ticker": "7203.T",
+    "symbol": "7203",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "イオン",
+    "type": "jp_stock",
+    "ticker": "8267.T",
+    "symbol": "8267",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "オリックス",
+    "type": "jp_stock",
+    "ticker": "8591.T",
+    "symbol": "8591",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "ヤマダ電機",
+    "type": "jp_stock",
+    "ticker": "9831.T",
+    "symbol": "9831",
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "SPCX\tスペースX",
+    "type": "us_stock",
+    "ticker": null,
+    "symbol": null,
+    "note": "非上場のため価格取得不可",
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "eMAXIS Slim 米国株式(S&P500)",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "eMAXIS NASDAQ100インデックス",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "世界経済インデックスファンド",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "楽天・プラス・ＮＡＳＤＡＱ-１００インデックス・ファンド",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "セゾン・バンガード・グローバルバランスファンド",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "楽天・全世界株式インデックス・ファンド（楽天・バンガード・ファンド（全世界株式））",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "楽天・全米株式インデックス・ファンド（楽天・バンガード・ファンド（全米株式））",
+    "type": "fund",
+    "ticker": null,
+    "symbol": null,
+    "note": null,
+    "accounts": [
+      "楽天証券"
+    ]
+  },
+  {
+    "name": "ドル／円",
+    "type": "fx",
+    "ticker": "JPY=X",
+    "symbol": "USD/JPY",
+    "note": null,
+    "accounts": [
+      "SBI FXトレード"
+    ]
+  }
+]

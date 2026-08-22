@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>保有銘柄ヒートマップ</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>保有銘柄ヒートマップ</h1>
+    <div class="controls">
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-type="jp_stock">日本株</button>
+        <button class="tab" data-type="us_stock">米国株</button>
+        <button class="tab" data-type="crypto">暗号資産</button>
+        <button class="tab" data-type="fund">ファンド(一覧のみ)</button>
+      </div>
+      <div class="metric-toggle" id="metricToggle">
+        <button class="metric active" data-metric="day">前日比</button>
+        <button class="metric" data-metric="month">月間比</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="heatmap" class="heatmap"></section>
+    <p id="status" class="status"></p>
+  </main>
+
+  <aside id="detailPanel" class="detail-panel hidden">
+    <button id="closeDetail" class="close-btn">×</button>
+    <div id="detailContent"></div>
+  </aside>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

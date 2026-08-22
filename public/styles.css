@@ -1,0 +1,202 @@
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --text: #e6e8ec;
+  --muted: #8a8f98;
+  --border: #2a2e37;
+  --up: #1f9d55;
+  --down: #d64545;
+  --flat: #4a4f59;
+  --accent: #5b8def;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tabs, .metric-toggle {
+  display: flex;
+  gap: 6px;
+}
+
+.tab, .metric {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.tab.active, .metric.active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: #1c2333;
+}
+
+main {
+  padding: 16px 20px;
+}
+
+.status {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 4px;
+}
+
+.tile {
+  border-radius: 6px;
+  padding: 8px;
+  min-height: 74px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.1s ease;
+}
+
+.tile:hover {
+  transform: scale(1.03);
+  z-index: 1;
+}
+
+.tile .symbol {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tile .name {
+  font-size: 10px;
+  opacity: 0.85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tile .pct {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tile.loading {
+  background: var(--flat);
+  color: var(--muted);
+}
+
+.tile.nodata {
+  background: #23262f;
+  color: var(--muted);
+}
+
+.fund-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.fund-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(420px, 100vw);
+  height: 100vh;
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.2s ease;
+}
+
+.detail-panel.hidden {
+  transform: translateX(100%);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 22px;
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 16px;
+}
+
+.detail-panel h2 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+}
+
+.detail-panel .sub {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.detail-panel .price-row {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.detail-panel .change {
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.detail-panel .summary {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #cfd3da;
+  white-space: pre-wrap;
+}
+
+.detail-panel .section-title {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 16px 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+canvas#detailChart {
+  max-height: 180px;
+}
