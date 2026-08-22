@@ -81,7 +81,7 @@ async function loadQuotesFor(type) {
 // fetch market caps separately (heavier Yahoo endpoint) so a slow/failed
 // lookup never blocks price display; tiles just default to a normal size
 async function loadMarketCapsFor(symbols) {
-  const batches = chunk(symbols, 30);
+  const batches = chunk(symbols, 20);
   for (const batch of batches) {
     try {
       const r = await fetch(`/api/marketcaps?symbols=${encodeURIComponent(batch.join(','))}`);
@@ -90,6 +90,7 @@ async function loadMarketCapsFor(symbols) {
         const q = quoteData.get(symbol);
         if (q) q.marketCap = cap;
       }
+      paintTiles();
     } catch (e) {
       /* ignore: tiles just fall back to a normal size */
     }

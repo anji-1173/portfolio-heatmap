@@ -144,20 +144,33 @@ app.get('/api/quotes', async (req, res) => {
 });
 
 // ---- market cap, for sizing heatmap tiles like a classic finance heatmap ----
-function chunkArray(arr, size) {
-  const out = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-  return out;
+// Yahoo's batch "v7/finance/quote" endpoint usually needs a session
+// cookie/crumb we don't have and fails outright, so this uses the same
+// per-symbol quoteSummary endpoint that /api/profile already relies on.
+function unwrap(field) {
+  if (field == null) return null;
+  return typeof field === 'object' ? field.raw ?? null : field;
 }
 
-async function fetchMarketCapBatch(symbols) {
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(
-    symbols.join(',')
-  )}&fields=marketCap,currency,symbol`;
-  const r = await fetch(url, { headers: HEADERS });
-  if (!r.ok) throw new Error(`yahoo quote ${r.status}`);
-  const json = await r.json();
-  return json?.quoteResponse?.result || [];
+async function fetchMarketCapOne(symbol) {
+  const cacheKey = 'cap1:' + symbol;
+  const cached = cacheGet(cacheKey, 6 * 3600_000);
+  if (cached !== null) return cached;
+
+  const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(
+    symbol
+  )}?modules=price`;
+  const out = await withRetry(async () => {
+    const r = await fetch(url, { headers: HEADERS });
+    if (!r.ok) throw new Error(`yahoo quoteSummary ${r.status}`);
+    const json = await r.json();
+    const price = json?.quoteSummary?.result?.[0]?.price;
+    if (!price) throw new Error('no price module');
+    return { cap: unwrap(price.marketCap), currency: price.currency ?? null };
+  }, 1, 400);
+
+  cacheSet(cacheKey, out);
+  return out;
 }
 
 app.get('/api/marketcaps', async (req, res) => {
@@ -173,20 +186,17 @@ app.get('/api/marketcaps', async (req, res) => {
 
   const usdJpy = await getUsdJpyRate();
   const out = {};
-  const batches = chunkArray(symbols, 30);
-  try {
-    for (const batch of batches) {
-      const rows = await withRetry(() => fetchMarketCapBatch(batch), 1, 400);
-      for (const row of rows) {
-        if (row.marketCap == null) continue;
-        const capJpy = row.currency === 'USD' && usdJpy ? row.marketCap * usdJpy : row.marketCap;
-        out[row.symbol] = capJpy;
+  await mapWithConcurrency(symbols, 4, async (symbol) => {
+    try {
+      const { cap, currency } = await fetchMarketCapOne(symbol);
+      if (cap != null) {
+        out[symbol] = currency === 'USD' && usdJpy ? cap * usdJpy : cap;
       }
+    } catch (e) {
+      // leave this symbol out of the result; its tile just falls back
+      // to a normal size instead of blocking the whole batch
     }
-  } catch (e) {
-    // Yahoo's batch quote endpoint sometimes needs a session cookie/crumb
-    // we don't have; degrade to "no size data" rather than failing.
-  }
+  });
   cacheSet(cacheKey, out);
   res.json(out);
 });
