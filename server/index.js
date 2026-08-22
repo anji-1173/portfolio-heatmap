@@ -143,6 +143,54 @@ app.get('/api/quotes', async (req, res) => {
   res.json(results);
 });
 
+// ---- market cap, for sizing heatmap tiles like a classic finance heatmap ----
+function chunkArray(arr, size) {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+
+async function fetchMarketCapBatch(symbols) {
+  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(
+    symbols.join(',')
+  )}&fields=marketCap,currency,symbol`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) throw new Error(`yahoo quote ${r.status}`);
+  const json = await r.json();
+  return json?.quoteResponse?.result || [];
+}
+
+app.get('/api/marketcaps', async (req, res) => {
+  const symbols = String(req.query.symbols || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (symbols.length === 0) return res.json({});
+
+  const cacheKey = 'marketcaps:' + symbols.join(',');
+  const cached = cacheGet(cacheKey, 3600_000);
+  if (cached) return res.json(cached);
+
+  const usdJpy = await getUsdJpyRate();
+  const out = {};
+  const batches = chunkArray(symbols, 30);
+  try {
+    for (const batch of batches) {
+      const rows = await withRetry(() => fetchMarketCapBatch(batch), 1, 400);
+      for (const row of rows) {
+        if (row.marketCap == null) continue;
+        const capJpy = row.currency === 'USD' && usdJpy ? row.marketCap * usdJpy : row.marketCap;
+        out[row.symbol] = capJpy;
+      }
+    }
+  } catch (e) {
+    // Yahoo's batch quote endpoint sometimes needs a session cookie/crumb
+    // we don't have; degrade to "no size data" rather than failing.
+  }
+  cacheSet(cacheKey, out);
+  res.json(out);
+});
+
 // ---- crypto price: try several free/no-key sources in order ----
 // CoinGecko's public API occasionally blocks requests from cloud-hosted
 // IPs (Render, AWS, etc.), so we keep two backups: Binance.US and CoinCap.
@@ -189,6 +237,7 @@ async function fetchCryptoFromCoinGecko(ids) {
     currency: 'JPY',
     dayChangePct: c.price_change_percentage_24h_in_currency ?? null,
     monthChangePct: c.price_change_percentage_30d_in_currency ?? null,
+    marketCap: c.market_cap ?? null,
   }));
   if (out.length === 0) throw new Error('coingecko empty');
   return out;
@@ -211,6 +260,7 @@ async function fetchCryptoOneFromBinanceUS(id) {
     currency: usdJpy ? 'JPY' : 'USD',
     dayChangePct: c.priceChangePercent != null ? Number(c.priceChangePercent) : null,
     monthChangePct: null,
+    marketCap: null,
   };
 }
 
@@ -223,6 +273,7 @@ async function fetchCryptoOneFromCoinCap(id) {
   if (!c || c.priceUsd == null) throw new Error('coincap empty');
   const usdJpy = await getUsdJpyRate();
   const priceUsd = Number(c.priceUsd);
+  const capUsd = c.marketCapUsd != null ? Number(c.marketCapUsd) : null;
   return {
     id,
     symbol: c.symbol,
@@ -230,6 +281,7 @@ async function fetchCryptoOneFromCoinCap(id) {
     currency: usdJpy ? 'JPY' : 'USD',
     dayChangePct: c.changePercent24Hr != null ? Number(c.changePercent24Hr) : null,
     monthChangePct: null,
+    marketCap: capUsd != null && usdJpy ? capUsd * usdJpy : capUsd,
   };
 }
 

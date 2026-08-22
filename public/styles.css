@@ -134,6 +134,12 @@ main {
   gap: 4px;
 }
 
+/* used for the by-sector view: each section is a full-width block with
+   its own independent nested grid, not a fixed-height grid cell */
+.heatmap.stacked {
+  display: block;
+}
+
 .tile {
   border-radius: 6px;
   padding: 8px;

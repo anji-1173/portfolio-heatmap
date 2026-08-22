@@ -73,8 +73,27 @@ async function loadQuotesFor(type) {
         /* ignore */
       }
     }
+    loadMarketCapsFor(symbols).then(paintTiles);
   }
   statusEl.textContent = '';
+}
+
+// fetch market caps separately (heavier Yahoo endpoint) so a slow/failed
+// lookup never blocks price display; tiles just default to a normal size
+async function loadMarketCapsFor(symbols) {
+  const batches = chunk(symbols, 30);
+  for (const batch of batches) {
+    try {
+      const r = await fetch(`/api/marketcaps?symbols=${encodeURIComponent(batch.join(','))}`);
+      const caps = await r.json();
+      for (const [symbol, cap] of Object.entries(caps)) {
+        const q = quoteData.get(symbol);
+        if (q) q.marketCap = cap;
+      }
+    } catch (e) {
+      /* ignore: tiles just fall back to a normal size */
+    }
+  }
 }
 
 function createTile(h) {
@@ -100,6 +119,7 @@ function render() {
     renderBySector();
     return;
   }
+  heatmapEl.classList.remove('stacked');
   const items = holdings.filter((h) => h.type === currentType);
   heatmapEl.innerHTML = '';
   for (const h of items) {
@@ -116,6 +136,7 @@ function renderBySector() {
     bySector.get(h.sector).push(h);
   }
 
+  heatmapEl.classList.add('stacked');
   heatmapEl.innerHTML = '';
   for (const [sector, list] of [...bySector.entries()].sort((a, b) => b[1].length - a[1].length)) {
     const section = document.createElement('div');
@@ -146,22 +167,12 @@ function colorForPct(pct) {
   return 'var(--flat)';
 }
 
-// bigger moves get a bigger box, like a classic market heatmap
-function sizeClassForPct(pct) {
-  if (pct == null || Number.isNaN(pct)) return '';
-  const abs = Math.abs(pct);
-  if (abs >= 5) return 'size-lg';
-  if (abs >= 2) return 'size-md';
-  return '';
-}
-
 function paintTiles() {
   const tiles = document.querySelectorAll('.tile');
   tiles.forEach((tile) => {
     const key = tile.dataset.key;
     const q = quoteData.get(key);
     const pctEl = tile.querySelector('.pct');
-    tile.classList.remove('size-md', 'size-lg');
     if (!q || q.error) {
       tile.classList.add('nodata');
       tile.classList.remove('loading');
@@ -173,8 +184,32 @@ function paintTiles() {
     const pct = currentMetric === 'day' ? q.dayChangePct : q.monthChangePct;
     tile.style.background = colorForPct(pct);
     pctEl.textContent = pct == null ? 'N/A' : `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%`;
-    const sizeClass = sizeClassForPct(pct);
-    if (sizeClass) tile.classList.add(sizeClass);
+  });
+  applySizeByCap();
+}
+
+// classic market heatmaps size boxes by market cap (how big the company/coin
+// is), not by how much it moved. Ranked per visible group (each sector
+// section ranks independently) so a "big" box means big-within-this-view.
+function applySizeByCap() {
+  const groups = [heatmapEl, ...document.querySelectorAll('.sector-heatmap')];
+  groups.forEach((group) => {
+    const tiles = [...group.children].filter((el) => el.classList.contains('tile'));
+    if (tiles.length === 0) return;
+    const caps = tiles
+      .map((t) => quoteData.get(t.dataset.key)?.marketCap)
+      .filter((c) => c != null && !Number.isNaN(c));
+    tiles.forEach((tile) => tile.classList.remove('size-md', 'size-lg'));
+    if (caps.length === 0) return; // no cap data yet -> leave uniform size
+    const sorted = [...caps].sort((a, b) => b - a);
+    const lgCut = sorted[Math.max(0, Math.floor(sorted.length * 0.15) - 1)];
+    const mdCut = sorted[Math.max(0, Math.floor(sorted.length * 0.5) - 1)];
+    tiles.forEach((tile) => {
+      const cap = quoteData.get(tile.dataset.key)?.marketCap;
+      if (cap == null) return;
+      if (cap >= lgCut) tile.classList.add('size-lg');
+      else if (cap >= mdCut) tile.classList.add('size-md');
+    });
   });
 }
 
@@ -186,19 +221,22 @@ function renderFundTable() {
   for (const h of items) {
     for (const account of h.accounts) {
       if (!byAccount.has(account)) byAccount.set(account, []);
-      byAccount.get(account).push(h.name);
+      byAccount.get(account).push(h);
     }
   }
 
   const rows = [...byAccount.entries()]
-    .map(([account, names]) => {
-      const nameRows = names
-        .map((n) => {
-          const query = encodeURIComponent(`${n} 基準価額`);
+    .map(([account, funds]) => {
+      const nameRows = funds
+        .map((h) => {
+          const link = h.fundCode
+            ? `https://finance.yahoo.co.jp/quote/${encodeURIComponent(h.fundCode)}/chart`
+            : `https://www.google.com/search?q=${encodeURIComponent(`${h.name} 基準価額`)}`;
+          const label = h.fundCode ? 'チャートを見る ↗' : '検索する ↗';
           return `<tr>
-            <td class="fund-name">${n}</td>
+            <td class="fund-name">${h.name}</td>
             <td class="fund-account">${account}</td>
-            <td class="fund-link"><a href="https://www.google.com/search?q=${query}" target="_blank" rel="noopener noreferrer">詳しく見る ↗</a></td>
+            <td class="fund-link"><a href="${link}" target="_blank" rel="noopener noreferrer">${label}</a></td>
           </tr>`;
         })
         .join('');
@@ -209,7 +247,7 @@ function renderFundTable() {
   heatmapEl.innerHTML = `
     <p class="fund-intro">
       投資信託(ファンド)は、株や暗号資産のようなリアルタイム価格を毎日は公表していないため、
-      ここでは「何を」「どの口座で」保有しているかの一覧と、基準価額を調べるための検索リンクを表示しています。
+      ここでは「何を」「どの口座で」保有しているかの一覧と、基準価額のチャートへのリンクを表示しています。
     </p>
     <table class="fund-table">
       <thead>
