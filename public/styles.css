@@ -129,6 +129,8 @@ main {
 .heatmap {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  grid-auto-rows: 74px;
+  grid-auto-flow: dense;
   gap: 4px;
 }
 
@@ -143,6 +145,7 @@ main {
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: transform 0.1s ease;
+  overflow: hidden;
 }
 
 .tile:hover {
@@ -166,6 +169,47 @@ main {
 .tile .pct {
   font-size: 12px;
   font-weight: 600;
+}
+
+/* box size scales with how big the day's move is */
+.tile.size-md {
+  grid-column: span 2;
+}
+
+.tile.size-lg {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.tile.size-md .symbol,
+.tile.size-lg .symbol {
+  font-size: 16px;
+}
+
+.tile.size-lg .pct {
+  font-size: 18px;
+}
+
+.sector-section {
+  grid-column: 1 / -1;
+  margin-bottom: 4px;
+}
+
+.sector-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 10px 4px 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+
+.sector-heatmap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  grid-auto-rows: 74px;
+  grid-auto-flow: dense;
+  gap: 4px;
 }
 
 .tile.loading {

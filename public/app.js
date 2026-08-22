@@ -77,27 +77,63 @@ async function loadQuotesFor(type) {
   statusEl.textContent = '';
 }
 
+function createTile(h) {
+  const tile = document.createElement('div');
+  tile.className = 'tile loading';
+  tile.dataset.key = h.ticker || h.name;
+  tile.innerHTML = `
+    <div class="symbol">${h.symbol || h.name}</div>
+    <div class="name">${h.name}</div>
+    <div class="pct">--</div>
+  `;
+  tile.addEventListener('click', () => openDetail(h));
+  return tile;
+}
+
 function render() {
   detailPanel.classList.add('hidden');
   if (currentType === 'fund') {
     renderFundTable();
     return;
   }
+  if (currentType === 'sector') {
+    renderBySector();
+    return;
+  }
   const items = holdings.filter((h) => h.type === currentType);
   heatmapEl.innerHTML = '';
   for (const h of items) {
-    const tile = document.createElement('div');
-    tile.className = 'tile loading';
-    tile.dataset.key = h.ticker || h.name;
-    tile.innerHTML = `
-      <div class="symbol">${h.symbol || h.name}</div>
-      <div class="name">${h.name}</div>
-      <div class="pct">--</div>
-    `;
-    tile.addEventListener('click', () => openDetail(h));
-    heatmapEl.appendChild(tile);
+    heatmapEl.appendChild(createTile(h));
   }
   loadQuotesFor(currentType).then(paintTiles);
+}
+
+function renderBySector() {
+  const items = holdings.filter((h) => (h.type === 'jp_stock' || h.type === 'us_stock') && h.sector);
+  const bySector = new Map();
+  for (const h of items) {
+    if (!bySector.has(h.sector)) bySector.set(h.sector, []);
+    bySector.get(h.sector).push(h);
+  }
+
+  heatmapEl.innerHTML = '';
+  for (const [sector, list] of [...bySector.entries()].sort((a, b) => b[1].length - a[1].length)) {
+    const section = document.createElement('div');
+    section.className = 'sector-section';
+    const title = document.createElement('div');
+    title.className = 'sector-title';
+    title.textContent = `${sector} (${list.length})`;
+    const grid = document.createElement('div');
+    grid.className = 'sector-heatmap';
+    for (const h of list) {
+      grid.appendChild(createTile(h));
+    }
+    section.appendChild(title);
+    section.appendChild(grid);
+    heatmapEl.appendChild(section);
+  }
+
+  Promise.all([loadQuotesFor('jp_stock'), loadQuotesFor('us_stock')]).then(paintTiles);
 }
 
 function colorForPct(pct) {
@@ -110,13 +146,22 @@ function colorForPct(pct) {
   return 'var(--flat)';
 }
 
+// bigger moves get a bigger box, like a classic market heatmap
+function sizeClassForPct(pct) {
+  if (pct == null || Number.isNaN(pct)) return '';
+  const abs = Math.abs(pct);
+  if (abs >= 5) return 'size-lg';
+  if (abs >= 2) return 'size-md';
+  return '';
+}
+
 function paintTiles() {
   const tiles = document.querySelectorAll('.tile');
   tiles.forEach((tile) => {
     const key = tile.dataset.key;
     const q = quoteData.get(key);
-    const nameEl = tile.querySelector('.name');
     const pctEl = tile.querySelector('.pct');
+    tile.classList.remove('size-md', 'size-lg');
     if (!q || q.error) {
       tile.classList.add('nodata');
       tile.classList.remove('loading');
@@ -128,6 +173,8 @@ function paintTiles() {
     const pct = currentMetric === 'day' ? q.dayChangePct : q.monthChangePct;
     tile.style.background = colorForPct(pct);
     pctEl.textContent = pct == null ? 'N/A' : `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%`;
+    const sizeClass = sizeClassForPct(pct);
+    if (sizeClass) tile.classList.add(sizeClass);
   });
 }
 
@@ -267,7 +314,11 @@ async function loadChart(h, timeframe) {
       options: {
         plugins: { legend: { display: false } },
         scales: {
-          x: { display: false },
+          x: {
+            display: true,
+            ticks: { color: '#8a8f98', maxRotation: 0, autoSkip: true, maxTicksLimit: 6 },
+            grid: { display: false },
+          },
           y: { ticks: { color: '#8a8f98' }, grid: { color: '#2a2e37' } },
         },
       },

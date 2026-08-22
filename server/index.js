@@ -143,39 +143,24 @@ app.get('/api/quotes', async (req, res) => {
   res.json(results);
 });
 
-// ---- crypto price: CoinGecko primary, CoinCap fallback (no API key) ----
-async function fetchCryptoFromCoinGecko(ids) {
-  const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=jpy&ids=${encodeURIComponent(
-    ids.join(',')
-  )}&price_change_percentage=24h,30d`;
-  const r = await fetch(url, { headers: HEADERS });
-  if (!r.ok) throw new Error(`coingecko ${r.status}`);
-  const json = await r.json();
-  return json.map((c) => ({
-    id: c.id,
-    symbol: c.symbol,
-    price: c.current_price,
-    currency: 'JPY',
-    dayChangePct: c.price_change_percentage_24h_in_currency ?? null,
-    monthChangePct: c.price_change_percentage_30d_in_currency ?? null,
-  }));
-}
-
-async function fetchCryptoFromCoinCap(ids) {
-  const url = `https://api.coincap.io/v2/assets?ids=${encodeURIComponent(ids.join(','))}`;
-  const r = await fetch(url, { headers: HEADERS });
-  if (!r.ok) throw new Error(`coincap ${r.status}`);
-  const json = await r.json();
-  const usdJpy = await getUsdJpyRate();
-  return (json.data || []).map((c) => ({
-    id: c.id,
-    symbol: c.symbol,
-    price: usdJpy ? Number(c.priceUsd) * usdJpy : Number(c.priceUsd),
-    currency: usdJpy ? 'JPY' : 'USD',
-    dayChangePct: c.changePercent24Hr != null ? Number(c.changePercent24Hr) : null,
-    monthChangePct: null,
-  }));
-}
+// ---- crypto price: try several free/no-key sources in order ----
+// CoinGecko's public API occasionally blocks requests from cloud-hosted
+// IPs (Render, AWS, etc.), so we keep two backups: Binance.US and CoinCap.
+const BINANCE_US_SYMBOL = {
+  bitcoin: 'BTCUSD',
+  ethereum: 'ETHUSD',
+  'bitcoin-cash': 'BCHUSD',
+  litecoin: 'LTCUSD',
+  ripple: 'XRPUSD',
+  stellar: 'XLMUSD',
+  polkadot: 'DOTUSD',
+  cosmos: 'ATOMUSD',
+  cardano: 'ADAUSD',
+  chainlink: 'LINKUSD',
+  dogecoin: 'DOGEUSD',
+  'shiba-inu': 'SHIBUSD',
+  'matic-network': 'MATICUSD',
+};
 
 async function getUsdJpyRate() {
   const cached = cacheGet('usdjpy', 3600_000);
@@ -190,6 +175,85 @@ async function getUsdJpyRate() {
   }
 }
 
+async function fetchCryptoFromCoinGecko(ids) {
+  const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=jpy&ids=${encodeURIComponent(
+    ids.join(',')
+  )}&price_change_percentage=24h,30d`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) throw new Error(`coingecko ${r.status}`);
+  const json = await r.json();
+  const out = json.map((c) => ({
+    id: c.id,
+    symbol: c.symbol,
+    price: c.current_price,
+    currency: 'JPY',
+    dayChangePct: c.price_change_percentage_24h_in_currency ?? null,
+    monthChangePct: c.price_change_percentage_30d_in_currency ?? null,
+  }));
+  if (out.length === 0) throw new Error('coingecko empty');
+  return out;
+}
+
+async function fetchCryptoOneFromBinanceUS(id) {
+  const symbol = BINANCE_US_SYMBOL[id];
+  if (!symbol) throw new Error('no binance.us symbol');
+  const url = `https://api.binance.us/api/v3/ticker/24hr?symbol=${encodeURIComponent(symbol)}`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) throw new Error(`binance.us ${r.status}`);
+  const c = await r.json();
+  if (!c.lastPrice) throw new Error('binance.us empty');
+  const usdJpy = await getUsdJpyRate();
+  const priceUsd = Number(c.lastPrice);
+  return {
+    id,
+    symbol: symbol.replace('USD', ''),
+    price: usdJpy ? priceUsd * usdJpy : priceUsd,
+    currency: usdJpy ? 'JPY' : 'USD',
+    dayChangePct: c.priceChangePercent != null ? Number(c.priceChangePercent) : null,
+    monthChangePct: null,
+  };
+}
+
+async function fetchCryptoOneFromCoinCap(id) {
+  const url = `https://api.coincap.io/v2/assets/${encodeURIComponent(id)}`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) throw new Error(`coincap ${r.status}`);
+  const json = await r.json();
+  const c = json.data;
+  if (!c || c.priceUsd == null) throw new Error('coincap empty');
+  const usdJpy = await getUsdJpyRate();
+  const priceUsd = Number(c.priceUsd);
+  return {
+    id,
+    symbol: c.symbol,
+    price: usdJpy ? priceUsd * usdJpy : priceUsd,
+    currency: usdJpy ? 'JPY' : 'USD',
+    dayChangePct: c.changePercent24Hr != null ? Number(c.changePercent24Hr) : null,
+    monthChangePct: null,
+  };
+}
+
+async function fetchCryptoOne(id) {
+  const cached = cacheGet('crypto1:' + id, 60_000);
+  if (cached) return cached;
+  let out;
+  try {
+    out = (await fetchCryptoFromCoinGecko([id]))[0];
+  } catch (e) {
+    try {
+      out = await fetchCryptoOneFromBinanceUS(id);
+    } catch (e2) {
+      try {
+        out = await fetchCryptoOneFromCoinCap(id);
+      } catch (e3) {
+        out = { id, error: true };
+      }
+    }
+  }
+  cacheSet('crypto1:' + id, out);
+  return out;
+}
+
 app.get('/api/crypto', async (req, res) => {
   const ids = String(req.query.ids || '')
     .split(',')
@@ -201,23 +265,22 @@ app.get('/api/crypto', async (req, res) => {
   const cached = cacheGet(cacheKey, 60_000);
   if (cached) return res.json(cached);
 
+  // fast path: one batched CoinGecko call covers everything
   try {
     const out = await withRetry(() => fetchCryptoFromCoinGecko(ids), 1, 500);
-    cacheSet(cacheKey, out);
-    return res.json(out);
-  } catch (e) {
-    // CoinGecko sometimes blocks cloud-hosted IPs; fall back to CoinCap
-    try {
-      const out = await fetchCryptoFromCoinCap(ids);
+    if (out.length === ids.length) {
       cacheSet(cacheKey, out);
       return res.json(out);
-    } catch (e2) {
-      // degrade gracefully: mark each requested id as unavailable rather
-      // than failing the whole request
-      const out = ids.map((id) => ({ id, error: true }));
-      return res.json(out);
     }
+  } catch (e) {
+    /* fall through to per-id resolution below */
   }
+
+  // slow path: resolve each id independently so one bad/unlisted coin
+  // doesn't take the rest down with it
+  const out = await mapWithConcurrency(ids, 4, (id) => fetchCryptoOne(id));
+  cacheSet(cacheKey, out);
+  res.json(out);
 });
 
 // ---- Yahoo profile (sector / industry / business summary) ----
@@ -299,6 +362,30 @@ async function fetchCryptoHistoryCoinGecko(id, days) {
   return (json.prices || []).map(([t, c]) => ({ t, c }));
 }
 
+const BINANCE_US_KLINE_PRESET = {
+  hour: { interval: '5m', limit: 288 },
+  day: { interval: '1d', limit: 90 },
+  week: { interval: '1d', limit: 365 },
+  month: { interval: '1w', limit: 260 },
+};
+
+async function fetchCryptoHistoryBinanceUS(id, timeframe) {
+  const symbol = BINANCE_US_SYMBOL[id];
+  if (!symbol) throw new Error('no binance.us symbol');
+  const { interval, limit } = BINANCE_US_KLINE_PRESET[timeframe];
+  const url = `https://api.binance.us/api/v3/klines?symbol=${encodeURIComponent(
+    symbol
+  )}&interval=${interval}&limit=${limit}`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) throw new Error(`binance.us klines ${r.status}`);
+  const rows = await r.json();
+  const usdJpy = await getUsdJpyRate();
+  return rows.map((row) => ({
+    t: row[6],
+    c: usdJpy ? Number(row[4]) * usdJpy : Number(row[4]),
+  }));
+}
+
 async function fetchCryptoHistoryCoinCap(id, days) {
   const end = Date.now();
   const start = end - days * 86400_000;
@@ -333,12 +420,19 @@ app.get('/api/crypto-history', async (req, res) => {
     return res.json(out);
   } catch (e) {
     try {
-      const points = await fetchCryptoHistoryCoinCap(id, days);
+      const points = await fetchCryptoHistoryBinanceUS(id, timeframe);
       const out = { id, timeframe, points };
       cacheSet(cacheKey, out);
       return res.json(out);
     } catch (e2) {
-      res.status(502).json({ error: String(e2) });
+      try {
+        const points = await fetchCryptoHistoryCoinCap(id, days);
+        const out = { id, timeframe, points };
+        cacheSet(cacheKey, out);
+        return res.json(out);
+      } catch (e3) {
+        res.status(502).json({ error: String(e3) });
+      }
     }
   }
 });
