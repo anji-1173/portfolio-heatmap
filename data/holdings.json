@@ -19,7 +19,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "コモディティ/ETF"
+    "sector": "コモディティ/ETF",
+    "capTier": 1
   },
   {
     "name": "ＮＥＸＴ　ＦＵＮＤＳ　インド株式指数・Ｎｉｆｔｙ　５０連動型上場投信",
@@ -30,7 +31,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "コモディティ/ETF"
+    "sector": "コモディティ/ETF",
+    "capTier": 1
   },
   {
     "name": "三井住友・日本債券インデックス・ファンド",
@@ -107,7 +109,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 2
   },
   {
     "name": "キリンＨＤ",
@@ -118,7 +121,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 3
   },
   {
     "name": "円谷フィールズＨＤ",
@@ -129,7 +133,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 1
   },
   {
     "name": "すかいらーくＨＤ",
@@ -140,7 +145,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 2
   },
   {
     "name": "菊池製作所",
@@ -151,7 +157,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 1
   },
   {
     "name": "力の源ＨＤ",
@@ -162,7 +169,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 1
   },
   {
     "name": "オリオンビール",
@@ -172,7 +180,8 @@
     "note": "非上場のため価格取得不可",
     "accounts": [
       "ＳＢＩ証券"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "アンジェス",
@@ -183,7 +192,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 1
   },
   {
     "name": "サイバーエージェント",
@@ -194,7 +204,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 2
   },
   {
     "name": "ハーモニック",
@@ -205,7 +216,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 1
   },
   {
     "name": "ＮＴＮ",
@@ -217,7 +229,8 @@
       "ＳＢＩ証券",
       "楽天証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 1
   },
   {
     "name": "日信号",
@@ -228,7 +241,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 1
   },
   {
     "name": "パナソニックＨＤ",
@@ -239,7 +253,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "ソニーグループ",
@@ -250,7 +265,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "村田製",
@@ -261,7 +277,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "三菱重",
@@ -272,7 +289,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 3
   },
   {
     "name": "壱番屋",
@@ -283,7 +301,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 2
   },
   {
     "name": "シチズン時計",
@@ -294,7 +313,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 1
   },
   {
     "name": "ソニーＦＧ",
@@ -305,7 +325,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 2
   },
   {
     "name": "ｉｓｐａｃｅ",
@@ -316,7 +337,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 1
   },
   {
     "name": "ＮＴＴ",
@@ -328,7 +350,8 @@
       "ＳＢＩ証券",
       "楽天証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 3
   },
   {
     "name": "吉野家ＨＤ",
@@ -339,7 +362,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 2
   },
   {
     "name": "三菱ＵＦＪ－ｅＭＡＸＩＳ　インド株式インデックス",
@@ -383,7 +407,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "アドバンスト マイクロ デバイシズ",
@@ -394,7 +419,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "アマゾン ドットコム",
@@ -405,7 +431,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 3
   },
   {
     "name": "ブロードコム",
@@ -416,7 +443,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "バイオエヌテック ADR",
@@ -427,7 +455,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 1
   },
   {
     "name": "ビヨンド ミート",
@@ -438,7 +467,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 1
   },
   {
     "name": "メイプルベア インク",
@@ -448,7 +478,8 @@
     "note": "非上場のため価格取得不可",
     "accounts": [
       "ＳＢＩ証券"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "コルゲート パルモリーブ",
@@ -459,7 +490,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 2
   },
   {
     "name": "CRISPRセラピューティクス",
@@ -470,7 +502,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 1
   },
   {
     "name": "デクスコム",
@@ -481,7 +514,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 2
   },
   {
     "name": "アルファベット A",
@@ -492,7 +526,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 3
   },
   {
     "name": "ヒムズ&ハーズヘルス",
@@ -503,7 +538,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 1
   },
   {
     "name": "ロビンフッド マーケッツ",
@@ -514,7 +550,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 2
   },
   {
     "name": "インテル",
@@ -525,7 +562,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 2
   },
   {
     "name": "コカ-コーラ",
@@ -536,7 +574,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 3
   },
   {
     "name": "モンダリーズ インターナショナル",
@@ -547,7 +586,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 2
   },
   {
     "name": "アルトリア グループ",
@@ -558,7 +598,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 2
   },
   {
     "name": "モデルナ",
@@ -569,7 +610,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 1
   },
   {
     "name": "マイクロソフト",
@@ -580,7 +622,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "ネットフリックス",
@@ -591,7 +634,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 3
   },
   {
     "name": "ナイキ B",
@@ -602,7 +646,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 2
   },
   {
     "name": "エヌビディア",
@@ -613,7 +658,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "ノボノルディスク ADR",
@@ -624,7 +670,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 3
   },
   {
     "name": "オクロ A",
@@ -635,7 +682,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "公益事業"
+    "sector": "公益事業",
+    "capTier": 1
   },
   {
     "name": "ペプシコ",
@@ -646,7 +694,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 3
   },
   {
     "name": "ファイザー",
@@ -657,7 +706,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 2
   },
   {
     "name": "プロクター & ギャンブル",
@@ -668,7 +718,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 3
   },
   {
     "name": "クアルコム",
@@ -679,7 +730,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 2
   },
   {
     "name": "リビアン オートモーティブ",
@@ -690,7 +742,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 1
   },
   {
     "name": "サザン",
@@ -701,7 +754,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "公益事業"
+    "sector": "公益事業",
+    "capTier": 2
   },
   {
     "name": "スポティファイ テクノロジー SA",
@@ -712,7 +766,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 2
   },
   {
     "name": "ソシエダードキミカイミネラデチリ ADR",
@@ -723,7 +778,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "素材"
+    "sector": "素材",
+    "capTier": 1
   },
   {
     "name": "テスラ",
@@ -734,7 +790,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 3
   },
   {
     "name": "台湾セミコンダクター ADR",
@@ -745,7 +802,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "ビザ A",
@@ -756,7 +814,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 3
   },
   {
     "name": "ビストラ",
@@ -767,7 +826,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "公益事業"
+    "sector": "公益事業",
+    "capTier": 2
   },
   {
     "name": "ベライゾン コミュニケーションズ",
@@ -778,7 +838,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 2
   },
   {
     "name": "ウォルマート インク",
@@ -789,7 +850,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 3
   },
   {
     "name": "ＳＢＩ－ＳＢＩ・Ｖ・Ｓ＆Ｐ５００インデックス・ファンド",
@@ -833,7 +895,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 1
   },
   {
     "name": "ディーエヌエー",
@@ -844,7 +907,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 2
   },
   {
     "name": "キッコマン",
@@ -855,7 +919,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 3
   },
   {
     "name": "旭化成",
@@ -866,7 +931,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "素材"
+    "sector": "素材",
+    "capTier": 3
   },
   {
     "name": "Ｆ＆ＬＣ（スシロー）",
@@ -877,7 +943,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 2
   },
   {
     "name": "フィスコ（ﾌﾞﾛｯｸﾁｪｰﾝ関連）",
@@ -888,7 +955,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 1
   },
   {
     "name": "大王紙",
@@ -899,7 +967,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "素材"
+    "sector": "素材",
+    "capTier": 2
   },
   {
     "name": "ソフト９９",
@@ -910,7 +979,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 1
   },
   {
     "name": "日本製鉄",
@@ -921,7 +991,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "素材"
+    "sector": "素材",
+    "capTier": 3
   },
   {
     "name": "ＳＡＫＩＧＡＫＥ",
@@ -931,7 +1002,8 @@
     "note": "銘柄特定不可のため価格取得不可",
     "accounts": [
       "ＳＢＩ証券"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "ＬＩＸＩＬ",
@@ -942,7 +1014,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 2
   },
   {
     "name": "ＪＶＣＫＷ　ﾋﾞｸﾀｰ・ｹﾝｳｯﾄﾞ（自動運転関連）",
@@ -953,7 +1026,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 2
   },
   {
     "name": "カシオ計",
@@ -964,7 +1038,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 2
   },
   {
     "name": "島津製",
@@ -975,7 +1050,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 3
   },
   {
     "name": "丸紅",
@@ -986,7 +1062,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 3
   },
   {
     "name": "リンガーハット",
@@ -997,7 +1074,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 1
   },
   {
     "name": "三菱UFJ",
@@ -1008,7 +1086,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 3
   },
   {
     "name": "みずほFG",
@@ -1019,7 +1098,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 3
   },
   {
     "name": "アコム",
@@ -1030,7 +1110,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 2
   },
   {
     "name": "ソフトバンク",
@@ -1041,7 +1122,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 3
   },
   {
     "name": "東電力ＨＤ",
@@ -1052,7 +1134,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "公益事業"
+    "sector": "公益事業",
+    "capTier": 3
   },
   {
     "name": "アプライド マテリアルズ",
@@ -1063,7 +1146,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 2
   },
   {
     "name": "アンビック マイクロ",
@@ -1073,7 +1157,8 @@
     "note": "銘柄特定不可のため価格取得不可",
     "accounts": [
       "ＳＢＩ証券"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "アーム ホールディングス",
@@ -1084,7 +1169,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 2
   },
   {
     "name": "アメリカン ステーツ ウォーター",
@@ -1095,7 +1181,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "公益事業"
+    "sector": "公益事業",
+    "capTier": 1
   },
   {
     "name": "ボーイング",
@@ -1106,7 +1193,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 2
   },
   {
     "name": "ブンゲ",
@@ -1117,7 +1205,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 1
   },
   {
     "name": "シティグループ",
@@ -1128,7 +1217,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 2
   },
   {
     "name": "カーニバル",
@@ -1139,7 +1229,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 1
   },
   {
     "name": "コインベース　グローバル",
@@ -1150,7 +1241,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 2
   },
   {
     "name": "クロノス グループ",
@@ -1161,7 +1253,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 1
   },
   {
     "name": "ウォルト ディズニー",
@@ -1172,7 +1265,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 2
   },
   {
     "name": "ラウンドヒル メモリー ETF",
@@ -1182,7 +1276,8 @@
     "note": "銘柄特定不可のため価格取得不可",
     "accounts": [
       "ＳＢＩ証券"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "エコペトロール ADR",
@@ -1193,7 +1288,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "エネルギー"
+    "sector": "エネルギー",
+    "capTier": 1
   },
   {
     "name": "イーハン ホールディングス",
@@ -1204,7 +1300,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 1
   },
   {
     "name": "ファーストエナジー",
@@ -1215,7 +1312,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "公益事業"
+    "sector": "公益事業",
+    "capTier": 1
   },
   {
     "name": "フラワーズ フーズ",
@@ -1226,7 +1324,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 1
   },
   {
     "name": "フォーティス",
@@ -1237,7 +1336,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "公益事業"
+    "sector": "公益事業",
+    "capTier": 1
   },
   {
     "name": "ヒューレット パッカード エンタープライズ",
@@ -1248,7 +1348,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 1
   },
   {
     "name": "インターナショナル ビジネス マシーンズ",
@@ -1259,7 +1360,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "ジョンソン & ジョンソン",
@@ -1270,7 +1372,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 3
   },
   {
     "name": "リーバイ ストラウス A",
@@ -1281,7 +1384,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 1
   },
   {
     "name": "イーライ リリィ",
@@ -1292,7 +1396,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 3
   },
   {
     "name": "レモネード",
@@ -1303,7 +1408,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 1
   },
   {
     "name": "モービルアイ グローバル",
@@ -1314,7 +1420,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 1
   },
   {
     "name": "マクドナルド",
@@ -1325,7 +1432,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 3
   },
   {
     "name": "メタ プラットフォームズ A(フェイスブック A)",
@@ -1336,7 +1444,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 3
   },
   {
     "name": "パランティア テクノロジーズ A",
@@ -1347,7 +1456,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 2
   },
   {
     "name": "レイセオン テクノロジーズ",
@@ -1358,7 +1468,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 2
   },
   {
     "name": "スターバックス",
@@ -1369,7 +1480,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 2
   },
   {
     "name": "スーパー マイクロ コンピューター",
@@ -1380,7 +1492,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 1
   },
   {
     "name": "ストラタ クリティカル メディカル A",
@@ -1390,7 +1503,8 @@
     "note": "銘柄特定不可のため価格取得不可",
     "accounts": [
       "ＳＢＩ証券"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "ウーバー テクノロジーズ",
@@ -1401,7 +1515,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 2
   },
   {
     "name": "US バンコープ",
@@ -1412,7 +1527,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 2
   },
   {
     "name": "ワーナーミュージックグループ",
@@ -1423,7 +1539,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 1
   },
   {
     "name": "ズーム ビデオ コミュニケーションズ",
@@ -1434,7 +1551,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 1
   },
   {
     "name": "ユーロナブ",
@@ -1444,7 +1562,8 @@
     "note": "再編に伴い価格取得不可",
     "accounts": [
       "ＳＢＩ証券"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "AT&T",
@@ -1455,7 +1574,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 2
   },
   {
     "name": "ワーナー ブラザース ディスカバリ",
@@ -1466,7 +1586,8 @@
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 1
   },
   {
     "name": "ビットコイン",
@@ -1477,7 +1598,8 @@
     "accounts": [
       "GMOコイン",
       "BINANCE"
-    ]
+    ],
+    "capTier": 3
   },
   {
     "name": "イーサリアム",
@@ -1489,7 +1611,8 @@
       "GMOコイン",
       "メタマスク",
       "メタマスク（保管用）"
-    ]
+    ],
+    "capTier": 3
   },
   {
     "name": "ビットコインキャッシュ",
@@ -1499,7 +1622,8 @@
     "note": null,
     "accounts": [
       "GMOコイン"
-    ]
+    ],
+    "capTier": 2
   },
   {
     "name": "ライトコイン",
@@ -1509,7 +1633,8 @@
     "note": null,
     "accounts": [
       "GMOコイン"
-    ]
+    ],
+    "capTier": 2
   },
   {
     "name": "リップル",
@@ -1520,7 +1645,8 @@
     "accounts": [
       "GMOコイン",
       "BINANCE"
-    ]
+    ],
+    "capTier": 2
   },
   {
     "name": "ステラルーメン",
@@ -1530,7 +1656,8 @@
     "note": null,
     "accounts": [
       "GMOコイン"
-    ]
+    ],
+    "capTier": 1
   },
   {
     "name": "ポルカドット",
@@ -1540,7 +1667,8 @@
     "note": null,
     "accounts": [
       "GMOコイン"
-    ]
+    ],
+    "capTier": 2
   },
   {
     "name": "コスモス",
@@ -1550,7 +1678,8 @@
     "note": null,
     "accounts": [
       "GMOコイン"
-    ]
+    ],
+    "capTier": 1
   },
   {
     "name": "FCRコイン",
@@ -1560,7 +1689,8 @@
     "note": "価格取得未対応",
     "accounts": [
       "GMOコイン"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "カルダノ",
@@ -1570,7 +1700,8 @@
     "note": null,
     "accounts": [
       "GMOコイン"
-    ]
+    ],
+    "capTier": 2
   },
   {
     "name": "チェーンリンク",
@@ -1580,7 +1711,8 @@
     "note": null,
     "accounts": [
       "GMOコイン"
-    ]
+    ],
+    "capTier": 2
   },
   {
     "name": "ドージコイン",
@@ -1591,7 +1723,8 @@
     "accounts": [
       "GMOコイン",
       "BINANCE"
-    ]
+    ],
+    "capTier": 2
   },
   {
     "name": "FSCC（フィスココイン）",
@@ -1601,7 +1734,8 @@
     "note": "価格取得未対応",
     "accounts": [
       "Zaif"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "SHIBA INU",
@@ -1611,7 +1745,8 @@
     "note": null,
     "accounts": [
       "BINANCE"
-    ]
+    ],
+    "capTier": 2
   },
   {
     "name": "Polygon",
@@ -1622,7 +1757,8 @@
     "accounts": [
       "BINANCE",
       "メタマスク"
-    ]
+    ],
+    "capTier": 1
   },
   {
     "name": "BNB",
@@ -1632,7 +1768,8 @@
     "note": null,
     "accounts": [
       "メタマスク"
-    ]
+    ],
+    "capTier": 2
   },
   {
     "name": "WETH(MATIC)",
@@ -1642,7 +1779,8 @@
     "note": null,
     "accounts": [
       "メタマスク"
-    ]
+    ],
+    "capTier": 3
   },
   {
     "name": "Cake",
@@ -1652,7 +1790,8 @@
     "note": null,
     "accounts": [
       "メタマスク"
-    ]
+    ],
+    "capTier": 1
   },
   {
     "name": "ＮＦＮＯＭＵＲＡ原油",
@@ -1663,7 +1802,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "コモディティ/ETF"
+    "sector": "コモディティ/ETF",
+    "capTier": 1
   },
   {
     "name": "アジアゲートＨＬＤ",
@@ -1674,7 +1814,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "不動産"
+    "sector": "不動産",
+    "capTier": 1
   },
   {
     "name": "イメージワン",
@@ -1685,7 +1826,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "ヘルスケア"
+    "sector": "ヘルスケア",
+    "capTier": 1
   },
   {
     "name": "日本軽金属HD",
@@ -1696,7 +1838,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "素材"
+    "sector": "素材",
+    "capTier": 2
   },
   {
     "name": "鎌倉新書",
@@ -1707,7 +1850,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "通信サービス"
+    "sector": "通信サービス",
+    "capTier": 1
   },
   {
     "name": "イーグル工業",
@@ -1718,7 +1862,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "資本財"
+    "sector": "資本財",
+    "capTier": 2
   },
   {
     "name": "ＴＤＫ",
@@ -1729,7 +1874,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "テクノロジー"
+    "sector": "テクノロジー",
+    "capTier": 3
   },
   {
     "name": "トヨタ自動車",
@@ -1740,7 +1886,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 3
   },
   {
     "name": "イオン",
@@ -1751,7 +1898,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "生活必需品"
+    "sector": "生活必需品",
+    "capTier": 3
   },
   {
     "name": "オリックス",
@@ -1762,7 +1910,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "金融"
+    "sector": "金融",
+    "capTier": 3
   },
   {
     "name": "ヤマダ電機",
@@ -1773,7 +1922,8 @@
     "accounts": [
       "楽天証券"
     ],
-    "sector": "一般消費財"
+    "sector": "一般消費財",
+    "capTier": 2
   },
   {
     "name": "SPCX\tスペースX",
@@ -1783,7 +1933,8 @@
     "note": "非上場のため価格取得不可",
     "accounts": [
       "楽天証券"
-    ]
+    ],
+    "capTier": null
   },
   {
     "name": "eMAXIS Slim 米国株式(S&P500)",

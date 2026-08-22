@@ -73,33 +73,20 @@ async function loadQuotesFor(type) {
         /* ignore */
       }
     }
-    loadMarketCapsFor(symbols).then(paintTiles);
   }
   statusEl.textContent = '';
 }
 
-// fetch market caps separately (heavier Yahoo endpoint) so a slow/failed
-// lookup never blocks price display; tiles just default to a normal size
-async function loadMarketCapsFor(symbols) {
-  const batches = chunk(symbols, 20);
-  for (const batch of batches) {
-    try {
-      const r = await fetch(`/api/marketcaps?symbols=${encodeURIComponent(batch.join(','))}`);
-      const caps = await r.json();
-      for (const [symbol, cap] of Object.entries(caps)) {
-        const q = quoteData.get(symbol);
-        if (q) q.marketCap = cap;
-      }
-      paintTiles();
-    } catch (e) {
-      /* ignore: tiles just fall back to a normal size */
-    }
-  }
-}
+// bigger companies/coins get a bigger box, like a classic market heatmap.
+// Uses a hand-classified size tier shipped with the holdings data rather
+// than a live market-cap lookup, since every free live source for this
+// turned out to be unreliable from a hosted server.
+const TIER_SIZE_CLASS = { 3: 'size-lg', 2: 'size-md' };
 
 function createTile(h) {
   const tile = document.createElement('div');
-  tile.className = 'tile loading';
+  const sizeClass = TIER_SIZE_CLASS[h.capTier] || '';
+  tile.className = `tile loading ${sizeClass}`.trim();
   tile.dataset.key = h.ticker || h.name;
   tile.innerHTML = `
     <div class="symbol">${h.symbol || h.name}</div>
@@ -185,32 +172,6 @@ function paintTiles() {
     const pct = currentMetric === 'day' ? q.dayChangePct : q.monthChangePct;
     tile.style.background = colorForPct(pct);
     pctEl.textContent = pct == null ? 'N/A' : `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%`;
-  });
-  applySizeByCap();
-}
-
-// classic market heatmaps size boxes by market cap (how big the company/coin
-// is), not by how much it moved. Ranked per visible group (each sector
-// section ranks independently) so a "big" box means big-within-this-view.
-function applySizeByCap() {
-  const groups = [heatmapEl, ...document.querySelectorAll('.sector-heatmap')];
-  groups.forEach((group) => {
-    const tiles = [...group.children].filter((el) => el.classList.contains('tile'));
-    if (tiles.length === 0) return;
-    const caps = tiles
-      .map((t) => quoteData.get(t.dataset.key)?.marketCap)
-      .filter((c) => c != null && !Number.isNaN(c));
-    tiles.forEach((tile) => tile.classList.remove('size-md', 'size-lg'));
-    if (caps.length === 0) return; // no cap data yet -> leave uniform size
-    const sorted = [...caps].sort((a, b) => b - a);
-    const lgCut = sorted[Math.max(0, Math.floor(sorted.length * 0.15) - 1)];
-    const mdCut = sorted[Math.max(0, Math.floor(sorted.length * 0.5) - 1)];
-    tiles.forEach((tile) => {
-      const cap = quoteData.get(tile.dataset.key)?.marketCap;
-      if (cap == null) return;
-      if (cap >= lgCut) tile.classList.add('size-lg');
-      else if (cap >= mdCut) tile.classList.add('size-md');
-    });
   });
 }
 

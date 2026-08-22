@@ -143,64 +143,6 @@ app.get('/api/quotes', async (req, res) => {
   res.json(results);
 });
 
-// ---- market cap, for sizing heatmap tiles like a classic finance heatmap ----
-// Yahoo's batch "v7/finance/quote" endpoint usually needs a session
-// cookie/crumb we don't have and fails outright, so this uses the same
-// per-symbol quoteSummary endpoint that /api/profile already relies on.
-function unwrap(field) {
-  if (field == null) return null;
-  return typeof field === 'object' ? field.raw ?? null : field;
-}
-
-async function fetchMarketCapOne(symbol) {
-  const cacheKey = 'cap1:' + symbol;
-  const cached = cacheGet(cacheKey, 6 * 3600_000);
-  if (cached !== null) return cached;
-
-  const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(
-    symbol
-  )}?modules=price`;
-  const out = await withRetry(async () => {
-    const r = await fetch(url, { headers: HEADERS });
-    if (!r.ok) throw new Error(`yahoo quoteSummary ${r.status}`);
-    const json = await r.json();
-    const price = json?.quoteSummary?.result?.[0]?.price;
-    if (!price) throw new Error('no price module');
-    return { cap: unwrap(price.marketCap), currency: price.currency ?? null };
-  }, 1, 400);
-
-  cacheSet(cacheKey, out);
-  return out;
-}
-
-app.get('/api/marketcaps', async (req, res) => {
-  const symbols = String(req.query.symbols || '')
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
-  if (symbols.length === 0) return res.json({});
-
-  const cacheKey = 'marketcaps:' + symbols.join(',');
-  const cached = cacheGet(cacheKey, 3600_000);
-  if (cached) return res.json(cached);
-
-  const usdJpy = await getUsdJpyRate();
-  const out = {};
-  await mapWithConcurrency(symbols, 4, async (symbol) => {
-    try {
-      const { cap, currency } = await fetchMarketCapOne(symbol);
-      if (cap != null) {
-        out[symbol] = currency === 'USD' && usdJpy ? cap * usdJpy : cap;
-      }
-    } catch (e) {
-      // leave this symbol out of the result; its tile just falls back
-      // to a normal size instead of blocking the whole batch
-    }
-  });
-  cacheSet(cacheKey, out);
-  res.json(out);
-});
-
 // ---- crypto price: try several free/no-key sources in order ----
 // CoinGecko's public API occasionally blocks requests from cloud-hosted
 // IPs (Render, AWS, etc.), so we keep two backups: Binance.US and CoinCap.
