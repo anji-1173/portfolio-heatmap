@@ -3,6 +3,8 @@ let currentType = 'jp_stock';
 let currentMetric = 'day';
 let quoteData = new Map(); // key(symbol or id) -> quote info
 let detailChart = null;
+let currentDetailHolding = null;
+let currentTimeframe = 'day';
 
 const heatmapEl = document.getElementById('heatmap');
 const statusEl = document.getElementById('status');
@@ -131,21 +133,44 @@ function paintTiles() {
 
 function renderFundTable() {
   const items = holdings.filter((h) => h.type === 'fund');
-  const rows = items
-    .map(
-      (h) => `<tr><td>${h.name}</td><td>${h.accounts.join(' / ')}</td></tr>`
-    )
+
+  // group by the account (broker) that holds each fund
+  const byAccount = new Map();
+  for (const h of items) {
+    for (const account of h.accounts) {
+      if (!byAccount.has(account)) byAccount.set(account, []);
+      byAccount.get(account).push(h.name);
+    }
+  }
+
+  const rows = [...byAccount.entries()]
+    .map(([account, names]) => {
+      const nameRows = names
+        .map((n) => `<tr><td class="fund-name">${n}</td><td class="fund-account">${account}</td></tr>`)
+        .join('');
+      return nameRows;
+    })
     .join('');
+
   heatmapEl.innerHTML = `
+    <p class="fund-intro">
+      投資信託(ファンド)は、株や暗号資産のようなリアルタイム価格を毎日は公表していないため、
+      ここでは「何を」「どの口座で」保有しているかの一覧のみを表示しています。
+    </p>
     <table class="fund-table">
+      <thead>
+        <tr><th>ファンド名</th><th>保有口座</th></tr>
+      </thead>
       <tbody>${rows}</tbody>
     </table>
   `;
-  statusEl.textContent = 'ファンドはリアルタイム価格の対象外です(一覧表示のみ)。';
+  statusEl.textContent = '';
 }
 
 async function openDetail(h) {
   detailPanel.classList.remove('hidden');
+  currentDetailHolding = h;
+  currentTimeframe = 'day';
   const key = h.ticker || h.name;
   const q = quoteData.get(key);
 
@@ -164,7 +189,13 @@ async function openDetail(h) {
       前日比: ${dayPct != null ? (dayPct >= 0 ? '+' : '') + dayPct.toFixed(2) + '%' : 'N/A'}
       ／ 月間比: ${monthPct != null ? (monthPct >= 0 ? '+' : '') + monthPct.toFixed(2) + '%' : 'N/A'}
     </div>
-    <div class="section-title">値動き(直近)</div>
+    <div class="section-title">値動き</div>
+    <div class="timeframe-toggle" id="timeframeToggle">
+      <button class="timeframe" data-timeframe="hour">時間足</button>
+      <button class="timeframe active" data-timeframe="day">日足</button>
+      <button class="timeframe" data-timeframe="week">週足</button>
+      <button class="timeframe" data-timeframe="month">月足</button>
+    </div>
     <canvas id="detailChart"></canvas>
     <div class="section-title">企業概要</div>
     <div class="summary" id="profileText">${h.note || '読み込み中...'}</div>
@@ -176,30 +207,52 @@ async function openDetail(h) {
   }
 
   if (h.ticker) {
-    loadChart(h);
+    loadChart(h, currentTimeframe);
     if (h.type !== 'crypto') loadProfile(h);
     else document.getElementById('profileText').textContent = '暗号資産のため企業概要はありません。';
   }
 }
 
-async function loadChart(h) {
+detailContent.addEventListener('click', (e) => {
+  const btn = e.target.closest('.timeframe');
+  if (!btn || !currentDetailHolding) return;
+  document.querySelectorAll('.timeframe').forEach((b) => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentTimeframe = btn.dataset.timeframe;
+  loadChart(currentDetailHolding, currentTimeframe);
+});
+
+async function loadChart(h, timeframe) {
   try {
     let points = [];
     if (h.type === 'crypto') {
-      const r = await fetch(`/api/crypto-history?id=${encodeURIComponent(h.ticker)}`);
+      const r = await fetch(
+        `/api/crypto-history?id=${encodeURIComponent(h.ticker)}&timeframe=${timeframe}`
+      );
       const data = await r.json();
       points = data.points || [];
     } else {
-      const r = await fetch(`/api/history?symbol=${encodeURIComponent(h.ticker)}`);
+      const r = await fetch(
+        `/api/history?symbol=${encodeURIComponent(h.ticker)}&timeframe=${timeframe}`
+      );
       const data = await r.json();
       points = data.points || [];
     }
     const ctx = document.getElementById('detailChart');
-    if (!ctx || points.length === 0) return;
+    if (!ctx) return;
+    if (detailChart) {
+      detailChart.destroy();
+      detailChart = null;
+    }
+    if (points.length === 0) return;
     detailChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: points.map((p) => new Date(p.t).toLocaleDateString('ja-JP')),
+        labels: points.map((p) =>
+          timeframe === 'hour'
+            ? new Date(p.t).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit' })
+            : new Date(p.t).toLocaleDateString('ja-JP')
+        ),
         datasets: [
           {
             data: points.map((p) => p.c),
