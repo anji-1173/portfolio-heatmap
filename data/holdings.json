@@ -504,13 +504,15 @@
   {
     "name": "メイプルベア インク",
     "type": "us_stock",
-    "ticker": null,
-    "symbol": null,
-    "note": "非上場のため価格取得不可",
+    "ticker": "CART",
+    "symbol": "CART",
+    "note": null,
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "capUsdB": null
+    "capUsdB": 8.5,
+    "sector": "一般消費財",
+    "summary": "食料品の買い物代行・配達サービス「Instacart」を運営する米企業の正式社名。登記上の社名は「Maplebear Inc.」で、Instacartブランドで事業展開しています。"
   },
   {
     "name": "コルゲート パルモリーブ",
@@ -1237,13 +1239,15 @@
   {
     "name": "アンビック マイクロ",
     "type": "us_stock",
-    "ticker": null,
-    "symbol": null,
-    "note": "銘柄特定不可のため価格取得不可",
+    "ticker": "AMBQ",
+    "symbol": "AMBQ",
+    "note": null,
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "capUsdB": null
+    "capUsdB": 0.6,
+    "sector": "テクノロジー",
+    "summary": "AI機器向けの超低消費電力半導体を手掛ける米ファブレス企業「Ambiq」。2025年7月にニューヨーク証券取引所へ新規上場しました。"
   },
   {
     "name": "アーム ホールディングス",
@@ -1365,13 +1369,15 @@
   {
     "name": "ラウンドヒル メモリー ETF",
     "type": "us_stock",
-    "ticker": null,
-    "symbol": null,
-    "note": "銘柄特定不可のため価格取得不可",
+    "ticker": "DRAM",
+    "symbol": "DRAM",
+    "note": null,
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "capUsdB": null
+    "capUsdB": 0.5,
+    "sector": "コモディティ/ETF",
+    "summary": "半導体メモリー(DRAM・NAND等)関連企業に投資する米国上場ETF。2026年4月に新規設定された商品で、マイクロン・テクノロジーなどを組み入れています。"
   },
   {
     "name": "エコペトロール ADR",
@@ -1610,13 +1616,15 @@
   {
     "name": "ストラタ クリティカル メディカル A",
     "type": "us_stock",
-    "ticker": null,
-    "symbol": null,
-    "note": "銘柄特定不可のため価格取得不可",
+    "ticker": "SRTA",
+    "symbol": "SRTA",
+    "note": null,
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "capUsdB": null
+    "capUsdB": 0.3,
+    "sector": "ヘルスケア",
+    "summary": "移植用臓器などの緊急医療搬送・ロジスティクスを手掛ける米医療サービス企業。2025年にICU Medical社からのスピンオフで新規上場しました。"
   },
   {
     "name": "ウーバー テクノロジーズ",
@@ -1673,13 +1681,15 @@
   {
     "name": "ユーロナブ",
     "type": "us_stock",
-    "ticker": null,
-    "symbol": null,
-    "note": "再編に伴い価格取得不可",
+    "ticker": "EURN",
+    "symbol": "EURN",
+    "note": null,
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "capUsdB": null
+    "capUsdB": 4,
+    "sector": "エネルギー",
+    "summary": "原油タンカーの運航を手掛けるベルギーの海運会社。2022年に発表されたフロントライン社との合併は2023年に破談となり、現在も独立して上場を続けています。"
   },
   {
     "name": "AT&T",
@@ -1802,13 +1812,13 @@
   {
     "name": "FCRコイン",
     "type": "crypto",
-    "ticker": null,
-    "symbol": null,
-    "note": "価格取得未対応",
+    "ticker": "fcr-coin",
+    "symbol": "FCR",
+    "note": null,
     "accounts": [
       "GMOコイン"
     ],
-    "capUsdB": null
+    "capUsdB": 0.002
   },
   {
     "name": "カルダノ",
@@ -1847,13 +1857,13 @@
   {
     "name": "FSCC（フィスココイン）",
     "type": "crypto",
-    "ticker": null,
-    "symbol": null,
-    "note": "価格取得未対応",
+    "ticker": "fisco-coin",
+    "symbol": "FSCC",
+    "note": null,
     "accounts": [
       "Zaif"
     ],
-    "capUsdB": null
+    "capUsdB": 0.003
   },
   {
     "name": "SHIBA INU",
@@ -2057,13 +2067,15 @@
   {
     "name": "SPCX\tスペースX",
     "type": "us_stock",
-    "ticker": null,
-    "symbol": null,
-    "note": "非上場のため価格取得不可",
+    "ticker": "SPCX",
+    "symbol": "SPCX",
+    "note": null,
     "accounts": [
       "楽天証券"
     ],
-    "capUsdB": null
+    "capUsdB": 2100,
+    "sector": "資本財",
+    "summary": "ロケット打ち上げ・人工衛星通信(starlink)を手掛ける宇宙開発企業。2026年6月にナスダック市場へ新規上場しました。"
   },
   {
     "name": "eMAXIS Slim 米国株式(S&P500)",
