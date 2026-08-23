@@ -97,27 +97,37 @@ function createTile(h) {
   return tile;
 }
 
-const SIZE_CLASSES = ['size-md', 'size-lg', 'size-xl'];
+// tile side length, in px, at the smallest/largest end of the scale
+const MIN_TILE_W = 110;
+const MIN_TILE_H = 74;
+const MAX_TILE_W = 300;
+const MAX_TILE_H = 200;
 
 function applySizeForTiles(tiles) {
   const withCap = tiles
     .map((tile) => ({ tile, cap: parseFloat(tile.dataset.cap) }))
     .filter((t) => !Number.isNaN(t.cap) && t.cap > 0);
-  tiles.forEach((tile) => tile.classList.remove(...SIZE_CLASSES));
+  tiles.forEach((tile) => {
+    tile.style.width = '';
+    tile.style.height = '';
+    tile.classList.remove('size-boosted');
+  });
   if (withCap.length < 2) return;
 
-  const logs = withCap.map((t) => Math.log10(t.cap));
-  const min = Math.min(...logs);
-  const max = Math.max(...logs);
-  if (max === min) return;
+  // side length proportional to sqrt(cap) -> box AREA proportional to cap,
+  // relative to the largest holding in this group. This is what a
+  // conventional finance heatmap does: a company 10x the size of another
+  // gets a visibly (not just marginally) bigger box, at the cost of most
+  // small-caps rendering near the minimum size -- that's expected.
+  const maxCap = Math.max(...withCap.map((t) => t.cap));
 
-  withCap.forEach(({ tile, cap }, i) => {
-    const t = (logs[i] - min) / (max - min); // 0..1, log-scaled rank
-    let sizeClass = '';
-    if (t >= 0.85) sizeClass = 'size-xl';
-    else if (t >= 0.6) sizeClass = 'size-lg';
-    else if (t >= 0.35) sizeClass = 'size-md';
-    if (sizeClass) tile.classList.add(sizeClass);
+  withCap.forEach(({ tile, cap }) => {
+    const scale = Math.sqrt(cap / maxCap); // 0..1
+    const w = MIN_TILE_W + (MAX_TILE_W - MIN_TILE_W) * scale;
+    const h = MIN_TILE_H + (MAX_TILE_H - MIN_TILE_H) * scale;
+    tile.style.width = `${Math.round(w)}px`;
+    tile.style.height = `${Math.round(h)}px`;
+    if (scale >= 0.5) tile.classList.add('size-boosted');
   });
 }
 
