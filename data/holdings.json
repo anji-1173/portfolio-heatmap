@@ -183,13 +183,15 @@
   {
     "name": "オリオンビール",
     "type": "jp_stock",
-    "ticker": null,
-    "symbol": null,
-    "note": "非上場のため価格取得不可",
+    "ticker": "409A.T",
+    "symbol": "409A",
+    "note": null,
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "capUsdB": null
+    "capUsdB": 0.35,
+    "sector": "生活必需品",
+    "summary": "沖縄を代表するビール「オリオンビール」を製造・販売するメーカー。ホテル・リゾート事業も展開しており、2025年9月に東証プライムへ新規上場しました。"
   },
   {
     "name": "アンジェス",
@@ -1066,13 +1068,15 @@
   {
     "name": "ＳＡＫＩＧＡＫＥ",
     "type": "jp_stock",
-    "ticker": null,
-    "symbol": null,
-    "note": "銘柄特定不可のため価格取得不可",
+    "ticker": "5891.T",
+    "symbol": "5891",
+    "note": null,
     "accounts": [
       "ＳＢＩ証券"
     ],
-    "capUsdB": null
+    "capUsdB": 0.06,
+    "sector": "一般消費財",
+    "summary": "京都発祥のラーメンチェーン「魁力屋」を運営する外食企業。看板商品は京都背脂醤油ラーメンで、フードコートへの出店にも強みを持ちます。"
   },
   {
     "name": "ＬＩＸＩＬ",
