@@ -160,6 +160,16 @@ const BINANCE_US_SYMBOL = {
   dogecoin: 'DOGEUSD',
   'shiba-inu': 'SHIBUSD',
   'matic-network': 'MATICUSD',
+  binancecoin: 'BNBUSD',
+  weth: 'ETHUSD',
+  'pancakeswap-token': 'CAKEUSD',
+};
+
+const COINCAP_ID = {
+  'matic-network': 'polygon',
+  binancecoin: 'binance-coin',
+  weth: 'wrapped-ether',
+  'pancakeswap-token': 'pancakeswap',
 };
 
 async function getUsdJpyRate() {
@@ -172,6 +182,69 @@ async function getUsdJpyRate() {
     return rate ?? null;
   } catch (e) {
     return null;
+  }
+}
+
+function pctChange(current, previous) {
+  if (!Number.isFinite(current) || !Number.isFinite(previous) || previous === 0) return null;
+  return ((current - previous) / previous) * 100;
+}
+
+async function fetchCryptoMonthChangeFromBinanceUS(id) {
+  const symbol = BINANCE_US_SYMBOL[id];
+  if (!symbol) throw new Error('no binance.us symbol');
+  const url = `https://api.binance.us/api/v3/klines?symbol=${encodeURIComponent(
+    symbol
+  )}&interval=1d&limit=32`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) throw new Error(`binance.us klines ${r.status}`);
+  const rows = await r.json();
+  if (!Array.isArray(rows) || rows.length < 31) throw new Error('binance.us month data missing');
+  const current = Number(rows[rows.length - 1]?.[4]);
+  const monthAgo = Number(rows[rows.length - 31]?.[4]);
+  const change = pctChange(current, monthAgo);
+  if (change == null) throw new Error('binance.us month change unavailable');
+  return change;
+}
+
+async function fetchCryptoMonthChangeFromCoinCap(id) {
+  const sourceId = COINCAP_ID[id] || id;
+  const end = Date.now();
+  const start = end - 35 * 86400_000;
+  const url = `https://api.coincap.io/v2/assets/${encodeURIComponent(
+    sourceId
+  )}/history?interval=d1&start=${start}&end=${end}`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) throw new Error(`coincap history ${r.status}`);
+  const json = await r.json();
+  const points = (json.data || [])
+    .map((p) => ({ t: Number(p.time), c: Number(p.priceUsd) }))
+    .filter((p) => Number.isFinite(p.t) && Number.isFinite(p.c))
+    .sort((a, b) => a.t - b.t);
+  if (points.length < 2) throw new Error('coincap month data missing');
+
+  const latest = points[points.length - 1];
+  const target = latest.t - 30 * 86400_000;
+  let monthAgo = null;
+  for (const point of points) {
+    if (point.t <= target) monthAgo = point;
+    else break;
+  }
+  if (!monthAgo) throw new Error('coincap month baseline missing');
+  const change = pctChange(latest.c, monthAgo.c);
+  if (change == null) throw new Error('coincap month change unavailable');
+  return change;
+}
+
+async function fetchCryptoMonthChange(id) {
+  try {
+    return await fetchCryptoMonthChangeFromBinanceUS(id);
+  } catch (e) {
+    try {
+      return await fetchCryptoMonthChangeFromCoinCap(id);
+    } catch (e2) {
+      return null;
+    }
   }
 }
 
@@ -253,6 +326,9 @@ async function fetchCryptoOne(id) {
         out = { id, error: true };
       }
     }
+  }
+  if (out && !out.error && out.monthChangePct == null) {
+    out.monthChangePct = await fetchCryptoMonthChange(id);
   }
   cacheSet('crypto1:' + id, out);
   return out;
