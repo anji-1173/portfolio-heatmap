@@ -291,7 +291,7 @@ async function openDetail(h) {
       <button class="timeframe" data-timeframe="month">月足</button>
     </div>
     <canvas id="detailChart"></canvas>
-    <div class="section-title">企業概要</div>
+    <div class="section-title">${h.type === 'crypto' ? 'この暗号資産について' : '企業概要'}</div>
     <div class="summary" id="profileText">${companyOverviewText(h)}</div>
   `;
 
@@ -309,9 +309,8 @@ async function openDetail(h) {
 // than fetched live: Yahoo's endpoint for this needs a session
 // cookie/crumb we don't have and was failing silently for every stock
 function companyOverviewText(h) {
-  if (h.type === 'crypto') return '暗号資産のため企業概要はありません。';
   const parts = [];
-  if (h.sector) parts.push(`業種: ${h.sector}`);
+  if (h.type !== 'crypto' && h.sector) parts.push(`業種: ${h.sector}`);
   if (h.summary) parts.push(h.summary);
   else if (h.note) parts.push(h.note);
   return parts.length ? parts.join('\n\n') : '概要は未登録です。';
