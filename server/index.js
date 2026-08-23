@@ -121,6 +121,7 @@ async function fetchQuote(symbol) {
     dayChangePct,
     monthChangePct,
     marketState: meta.marketState ?? null,
+    asOf: meta.regularMarketTime ? meta.regularMarketTime * 1000 : Date.now(),
   };
   cacheSet('quote:' + symbol, out);
   return out;
@@ -263,6 +264,7 @@ async function fetchCryptoFromCoinGecko(ids) {
     dayChangePct: c.price_change_percentage_24h_in_currency ?? null,
     monthChangePct: c.price_change_percentage_30d_in_currency ?? null,
     marketCap: c.market_cap ?? null,
+    asOf: c.last_updated ? new Date(c.last_updated).getTime() : Date.now(),
   }));
   if (out.length === 0) throw new Error('coingecko empty');
   return out;
@@ -286,6 +288,7 @@ async function fetchCryptoOneFromBinanceUS(id) {
     dayChangePct: c.priceChangePercent != null ? Number(c.priceChangePercent) : null,
     monthChangePct: null,
     marketCap: null,
+    asOf: c.closeTime ? Number(c.closeTime) : Date.now(),
   };
 }
 
@@ -307,6 +310,7 @@ async function fetchCryptoOneFromCoinCap(id) {
     dayChangePct: c.changePercent24Hr != null ? Number(c.changePercent24Hr) : null,
     monthChangePct: null,
     marketCap: capUsd != null && usdJpy ? capUsd * usdJpy : capUsd,
+    asOf: Date.now(),
   };
 }
 

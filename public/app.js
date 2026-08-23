@@ -274,11 +274,21 @@ async function openDetail(h) {
       : '価格取得不可';
   const dayPct = q?.dayChangePct;
   const monthPct = q?.monthChangePct;
+  const asOfText = q?.asOf
+    ? new Date(q.asOf).toLocaleString('ja-JP', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : null;
 
   detailContent.innerHTML = `
     <h2>${h.name}</h2>
     <div class="sub">${h.symbol || ''} ・ ${h.accounts.join(' / ')}</div>
     <div class="price-row">${priceText}</div>
+    ${asOfText ? `<div class="as-of">${asOfText} 時点</div>` : ''}
     <div class="change">
       前日比: ${dayPct != null ? (dayPct >= 0 ? '+' : '') + dayPct.toFixed(2) + '%' : 'N/A'}
       ／ 月間比: ${monthPct != null ? (monthPct >= 0 ? '+' : '') + monthPct.toFixed(2) + '%' : 'N/A'}

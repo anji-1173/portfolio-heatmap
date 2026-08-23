@@ -297,6 +297,12 @@ main {
   margin-bottom: 4px;
 }
 
+.detail-panel .as-of {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
 .detail-panel .change {
   font-size: 13px;
   margin-bottom: 16px;
