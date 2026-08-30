@@ -299,6 +299,7 @@ async function openDetail(h) {
       <button class="timeframe active" data-timeframe="day">日足</button>
       <button class="timeframe" data-timeframe="week">週足</button>
       <button class="timeframe" data-timeframe="month">月足</button>
+      <button class="timeframe" data-timeframe="year">年足</button>
     </div>
     <canvas id="detailChart"></canvas>
     <div class="section-title">${h.type === 'crypto' ? 'この暗号資産について' : '企業概要'}</div>
@@ -361,11 +362,20 @@ async function loadChart(h, timeframe) {
     detailChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: points.map((p) =>
-          timeframe === 'hour'
-            ? new Date(p.t).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit' })
-            : new Date(p.t).toLocaleDateString('ja-JP')
-        ),
+        labels: points.map((p) => {
+          const date = new Date(p.t);
+          if (timeframe === 'hour') {
+            return date.toLocaleString('ja-JP', {
+              month: 'numeric',
+              day: 'numeric',
+              hour: '2-digit',
+            });
+          }
+          if (timeframe === 'year') {
+            return date.toLocaleDateString('ja-JP', { year: 'numeric' });
+          }
+          return date.toLocaleDateString('ja-JP');
+        }),
         datasets: [
           {
             data: points.map((p) => p.c),
