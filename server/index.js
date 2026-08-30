@@ -465,12 +465,10 @@ app.get('/api/history', async (req, res) => {
       timeframe === 'year'
         ? await withRetry(() => {
             const now = Math.floor(Date.now() / 1000);
-            const twentyYearsAgo = now - 20 * 365 * 24 * 3600;
-            // bounded start, not period1=0 ("since the beginning of
-            // time") -- for some tickers (パーソルHD) Yahoo's oldest
-            // adjusted-close data is badly wrong (off by 100x+), which
-            // period1=0 would happily include
-            return fetchYahooChartByPeriod(symbol, twentyYearsAgo, now, interval);
+            // full history (period1=0) -- safe now that dropPriceOutliers
+            // scrubs any badly-wrong old data (like パーソルHD's) instead
+            // of just excluding old data by date
+            return fetchYahooChartByPeriod(symbol, 0, now, interval);
           })
         : await withRetry(() => fetchYahooChart(symbol, range, interval));
     const timestamps = result?.timestamp || [];
