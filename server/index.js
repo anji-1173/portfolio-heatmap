@@ -69,12 +69,12 @@ const RANGE_PRESETS = {
   week: { range: '2y', interval: '1wk' },
   month: { range: '10y', interval: '1mo' },
   // weekly granularity is plenty to build an accurate yearly open/high/
-  // low/close bar (see aggregateYearlyOHLC) and keeps the response far
-  // smaller than daily bars over decades -- range='max' combined with
-  // interval='1d' was observed (パーソルHD) to come back with only the
-  // first few years of data and nothing after, so this also avoids
-  // whatever limit that combination was hitting
-  year: { range: 'max', interval: '1wk' },
+  // low/close bar (see aggregateYearlyOHLC). range='max' was observed
+  // (パーソルHD) to come back with only the first few years of data and
+  // nothing after -- true regardless of interval -- so this uses an
+  // explicit bounded range instead of the open-ended 'max', which is a
+  // much more standard/reliable way to call this endpoint
+  year: { range: '20y', interval: '1wk' },
 };
 
 // build one OHLC bar per calendar year from a daily/near-daily close
@@ -564,7 +564,16 @@ app.get('/api/holdings', (req, res) => {
   res.json(holdings);
 });
 
-app.use(express.static(path.join(__dirname, '..', 'public')));
+// no-cache so a phone browser doesn't keep serving an old app.js/index.html
+// after a deploy (this app changes often; staleness isn't worth the
+// bandwidth saved)
+app.use(
+  express.static(path.join(__dirname, '..', 'public'), {
+    etag: false,
+    lastModified: false,
+    setHeaders: (res) => res.set('Cache-Control', 'no-store'),
+  })
+);
 
 app.listen(PORT, () => {
   console.log(`portfolio-heatmap server listening on http://localhost:${PORT}`);
