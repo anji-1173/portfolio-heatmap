@@ -68,7 +68,25 @@ const RANGE_PRESETS = {
   day: { range: '3mo', interval: '1d' },
   week: { range: '2y', interval: '1wk' },
   month: { range: '10y', interval: '1mo' },
+  year: { range: 'max', interval: '3mo' },
 };
+
+function toYearEndPoints(points) {
+  const byYear = new Map();
+  const sorted = points
+    .filter((p) => Number.isFinite(p.t) && p.c != null)
+    .sort((a, b) => a.t - b.t);
+
+  for (const point of sorted) {
+    const year = new Date(point.t).getUTCFullYear();
+    byYear.set(year, point);
+  }
+  return [...byYear.values()];
+}
+
+function pointsForTimeframe(points, timeframe) {
+  return timeframe === 'year' ? toYearEndPoints(points) : points;
+}
 
 async function fetchYahooChart(symbol, range, interval) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
@@ -368,7 +386,7 @@ app.get('/api/crypto', async (req, res) => {
 });
 
 // ---- price history for chart (stocks) ----
-// timeframe: hour | day | week | month  (see RANGE_PRESETS)
+// timeframe: hour | day | week | month | year  (see RANGE_PRESETS)
 app.get('/api/history', async (req, res) => {
   const symbol = String(req.query.symbol || '').trim();
   const timeframe = RANGE_PRESETS[req.query.timeframe] ? req.query.timeframe : 'day';
@@ -383,9 +401,10 @@ app.get('/api/history', async (req, res) => {
     const result = await withRetry(() => fetchYahooChart(symbol, range, interval));
     const timestamps = result?.timestamp || [];
     const closes = result?.indicators?.quote?.[0]?.close || [];
-    const points = timestamps
+    let points = timestamps
       .map((t, i) => ({ t: t * 1000, c: closes[i] }))
       .filter((p) => p.c != null);
+    points = pointsForTimeframe(points, timeframe);
     const out = { symbol, timeframe, points };
     cacheSet(cacheKey, out);
     res.json(out);
@@ -395,8 +414,8 @@ app.get('/api/history', async (req, res) => {
 });
 
 // ---- price history for chart (crypto) ----
-// timeframe: hour | day | week | month
-const CRYPTO_DAYS = { hour: 1, day: 90, week: 365, month: 1825 };
+// timeframe: hour | day | week | month | year
+const CRYPTO_DAYS = { hour: 1, day: 90, week: 365, month: 1825, year: 'max' };
 
 async function fetchCryptoHistoryCoinGecko(id, days) {
   const url = `https://api.coingecko.com/api/v3/coins/${encodeURIComponent(
@@ -413,6 +432,7 @@ const BINANCE_US_KLINE_PRESET = {
   day: { interval: '1d', limit: 90 },
   week: { interval: '1d', limit: 365 },
   month: { interval: '1w', limit: 260 },
+  year: { interval: '1M', limit: 1000 },
 };
 
 async function fetchCryptoHistoryBinanceUS(id, timeframe) {
@@ -434,7 +454,7 @@ async function fetchCryptoHistoryBinanceUS(id, timeframe) {
 
 async function fetchCryptoHistoryCoinCap(id, days) {
   const end = Date.now();
-  const start = end - days * 86400_000;
+  const start = days === 'max' ? Date.UTC(2009, 0, 1) : end - days * 86400_000;
   const interval = days <= 2 ? 'h1' : days <= 400 ? 'd1' : 'd1';
   const url = `https://api.coincap.io/v2/assets/${encodeURIComponent(
     id
@@ -460,19 +480,22 @@ app.get('/api/crypto-history', async (req, res) => {
 
   const days = CRYPTO_DAYS[timeframe];
   try {
-    const points = await withRetry(() => fetchCryptoHistoryCoinGecko(id, days), 1, 500);
+    const rawPoints = await withRetry(() => fetchCryptoHistoryCoinGecko(id, days), 1, 500);
+    const points = pointsForTimeframe(rawPoints, timeframe);
     const out = { id, timeframe, points };
     cacheSet(cacheKey, out);
     return res.json(out);
   } catch (e) {
     try {
-      const points = await fetchCryptoHistoryBinanceUS(id, timeframe);
+      const rawPoints = await fetchCryptoHistoryBinanceUS(id, timeframe);
+      const points = pointsForTimeframe(rawPoints, timeframe);
       const out = { id, timeframe, points };
       cacheSet(cacheKey, out);
       return res.json(out);
     } catch (e2) {
       try {
-        const points = await fetchCryptoHistoryCoinCap(id, days);
+        const rawPoints = await fetchCryptoHistoryCoinCap(id, days);
+        const points = pointsForTimeframe(rawPoints, timeframe);
         const out = { id, timeframe, points };
         cacheSet(cacheKey, out);
         return res.json(out);
@@ -492,3 +515,4 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.listen(PORT, () => {
   console.log(`portfolio-heatmap server listening on http://localhost:${PORT}`);
 });
+
