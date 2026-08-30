@@ -123,10 +123,14 @@ async function fetchQuote(symbol) {
 
   const result = await withRetry(() => fetchYahooChart(symbol, '2mo', '1d'));
   const meta = result.meta;
-  // adjusted close so a split within the lookback window doesn't distort
-  // the month-over-month change calculation below
-  const closes =
-    result.indicators?.adjclose?.[0]?.adjclose || result.indicators?.quote?.[0]?.close || [];
+  // adjusted close (per-point, with a raw-close fallback for any gaps)
+  // so a split within the lookback window doesn't distort the
+  // month-over-month change calculation below
+  const adjCloses = result.indicators?.adjclose?.[0]?.adjclose || [];
+  const rawCloses = result.indicators?.quote?.[0]?.close || [];
+  const closes = adjCloses.length
+    ? adjCloses.map((c, i) => c ?? rawCloses[i])
+    : rawCloses;
   const timestamps = result.timestamp || [];
 
   const price = meta.regularMarketPrice;
@@ -421,12 +425,14 @@ app.get('/api/history', async (req, res) => {
     const result = await withRetry(() => fetchYahooChart(symbol, range, interval));
     const timestamps = result?.timestamp || [];
     // adjusted close (accounts for stock splits/dividends) so a split
-    // doesn't show up as a sudden fake price drop in the chart; falls
-    // back to the raw close if Yahoo didn't return an adjusted series
-    const adjCloses = result?.indicators?.adjclose?.[0]?.adjclose;
-    const closes = adjCloses || result?.indicators?.quote?.[0]?.close || [];
+    // doesn't show up as a sudden fake price drop in the chart. Yahoo
+    // sometimes leaves gaps in the adjclose series for part of a
+    // ticker's history (e.g. around a recent split), so fall back to
+    // the raw close per-point rather than dropping those dates entirely
+    const adjCloses = result?.indicators?.adjclose?.[0]?.adjclose || [];
+    const rawCloses = result?.indicators?.quote?.[0]?.close || [];
     let points = timestamps
-      .map((t, i) => ({ t: t * 1000, c: closes[i] }))
+      .map((t, i) => ({ t: t * 1000, c: adjCloses[i] ?? rawCloses[i] }))
       .filter((p) => p.c != null);
     points = pointsForTimeframe(points, timeframe);
     const out = { symbol, timeframe, points };
