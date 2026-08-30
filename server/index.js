@@ -68,24 +68,41 @@ const RANGE_PRESETS = {
   day: { range: '3mo', interval: '1d' },
   week: { range: '2y', interval: '1wk' },
   month: { range: '10y', interval: '1mo' },
-  year: { range: 'max', interval: '3mo' },
+  // daily granularity across the whole trading history, so each year's
+  // open/high/low/close bar (see aggregateYearlyOHLC) is a real yearly
+  // candle rather than a single arbitrary quarterly sample
+  year: { range: 'max', interval: '1d' },
 };
 
-function toYearEndPoints(points) {
-  const byYear = new Map();
+// build one OHLC bar per calendar year from a daily/near-daily close
+// series -- this is how a brokerage's 年足 (yearly candle chart) is
+// constructed: open = first close of the year, high/low = the extremes
+// seen that year, close = last close of the year (or latest so far, for
+// the current in-progress year)
+function aggregateYearlyOHLC(points) {
   const sorted = points
     .filter((p) => Number.isFinite(p.t) && p.c != null)
     .sort((a, b) => a.t - b.t);
 
+  const byYear = new Map();
   for (const point of sorted) {
     const year = new Date(point.t).getUTCFullYear();
-    byYear.set(year, point);
+    let bar = byYear.get(year);
+    if (!bar) {
+      bar = { t: point.t, o: point.c, h: point.c, l: point.c, c: point.c };
+      byYear.set(year, bar);
+    } else {
+      bar.h = Math.max(bar.h, point.c);
+      bar.l = Math.min(bar.l, point.c);
+      bar.c = point.c;
+      bar.t = point.t;
+    }
   }
   return [...byYear.values()];
 }
 
 function pointsForTimeframe(points, timeframe) {
-  return timeframe === 'year' ? toYearEndPoints(points) : points;
+  return timeframe === 'year' ? aggregateYearlyOHLC(points) : points;
 }
 
 async function fetchYahooChart(symbol, range, interval) {

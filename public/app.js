@@ -359,6 +359,49 @@ async function loadChart(h, timeframe) {
       detailChart = null;
     }
     if (points.length === 0) return;
+
+    // 年足 (yearly): one open/high/low/close candle per year, like a
+    // brokerage's yearly chart -- not a line, since a line drawn through
+    // one sparse point per year looks broken/misleading
+    if (timeframe === 'year' && points.every((p) => p.o != null)) {
+      const labels = points.map((p) => String(new Date(p.t).getUTCFullYear()));
+      const up = (p) => p.c >= p.o;
+      detailChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: '値幅(高値-安値)',
+              data: points.map((p) => [p.l, p.h]),
+              backgroundColor: points.map((p) => (up(p) ? 'rgba(31,157,85,0.45)' : 'rgba(214,69,69,0.45)')),
+              barThickness: 2,
+              borderWidth: 0,
+            },
+            {
+              label: '始値-終値',
+              data: points.map((p) => [Math.min(p.o, p.c), Math.max(p.o, p.c)]),
+              backgroundColor: points.map((p) => (up(p) ? 'rgba(31,157,85,0.9)' : 'rgba(214,69,69,0.9)')),
+              barThickness: 14,
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              grouped: false,
+              ticks: { color: '#8a8f98', maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
+              grid: { display: false },
+            },
+            y: { ticks: { color: '#8a8f98' }, grid: { color: '#2a2e37' } },
+          },
+        },
+      });
+      return;
+    }
+
     detailChart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -370,9 +413,6 @@ async function loadChart(h, timeframe) {
               day: 'numeric',
               hour: '2-digit',
             });
-          }
-          if (timeframe === 'year') {
-            return date.toLocaleDateString('ja-JP', { year: 'numeric' });
           }
           return date.toLocaleDateString('ja-JP');
         }),
