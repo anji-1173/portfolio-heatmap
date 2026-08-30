@@ -68,10 +68,13 @@ const RANGE_PRESETS = {
   day: { range: '3mo', interval: '1d' },
   week: { range: '2y', interval: '1wk' },
   month: { range: '10y', interval: '1mo' },
-  // daily granularity across the whole trading history, so each year's
-  // open/high/low/close bar (see aggregateYearlyOHLC) is a real yearly
-  // candle rather than a single arbitrary quarterly sample
-  year: { range: 'max', interval: '1d' },
+  // weekly granularity is plenty to build an accurate yearly open/high/
+  // low/close bar (see aggregateYearlyOHLC) and keeps the response far
+  // smaller than daily bars over decades -- range='max' combined with
+  // interval='1d' was observed (パーソルHD) to come back with only the
+  // first few years of data and nothing after, so this also avoids
+  // whatever limit that combination was hitting
+  year: { range: 'max', interval: '1wk' },
 };
 
 // build one OHLC bar per calendar year from a daily/near-daily close
@@ -109,6 +112,22 @@ async function fetchYahooChart(symbol, range, interval) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
     symbol
   )}?interval=${interval}&range=${range}`;
+  const res = await fetch(url, { headers: HEADERS });
+  if (!res.ok) throw new Error(`yahoo chart ${res.status}`);
+  const json = await res.json();
+  const result = json?.chart?.result?.[0];
+  if (!result) throw new Error('no result');
+  return result;
+}
+
+// same as fetchYahooChart, but with an explicit start/end date instead of
+// a range="max" shorthand -- used for the yearly chart because range=max
+// was observed to sometimes come back covering only the first few years
+// of a ticker's history and nothing after
+async function fetchYahooChartByPeriod(symbol, period1, period2, interval) {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
+    symbol
+  )}?interval=${interval}&period1=${period1}&period2=${period2}`;
   const res = await fetch(url, { headers: HEADERS });
   if (!res.ok) throw new Error(`yahoo chart ${res.status}`);
   const json = await res.json();
@@ -422,7 +441,12 @@ app.get('/api/history', async (req, res) => {
 
   try {
     const { range, interval } = RANGE_PRESETS[timeframe];
-    const result = await withRetry(() => fetchYahooChart(symbol, range, interval));
+    const result =
+      timeframe === 'year'
+        ? await withRetry(() =>
+            fetchYahooChartByPeriod(symbol, 0, Math.floor(Date.now() / 1000), interval)
+          )
+        : await withRetry(() => fetchYahooChart(symbol, range, interval));
     const timestamps = result?.timestamp || [];
     // adjusted close (accounts for stock splits/dividends) so a split
     // doesn't show up as a sudden fake price drop in the chart. Yahoo
