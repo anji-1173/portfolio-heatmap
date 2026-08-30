@@ -123,7 +123,10 @@ async function fetchQuote(symbol) {
 
   const result = await withRetry(() => fetchYahooChart(symbol, '2mo', '1d'));
   const meta = result.meta;
-  const closes = result.indicators?.quote?.[0]?.close || [];
+  // adjusted close so a split within the lookback window doesn't distort
+  // the month-over-month change calculation below
+  const closes =
+    result.indicators?.adjclose?.[0]?.adjclose || result.indicators?.quote?.[0]?.close || [];
   const timestamps = result.timestamp || [];
 
   const price = meta.regularMarketPrice;
@@ -417,7 +420,11 @@ app.get('/api/history', async (req, res) => {
     const { range, interval } = RANGE_PRESETS[timeframe];
     const result = await withRetry(() => fetchYahooChart(symbol, range, interval));
     const timestamps = result?.timestamp || [];
-    const closes = result?.indicators?.quote?.[0]?.close || [];
+    // adjusted close (accounts for stock splits/dividends) so a split
+    // doesn't show up as a sudden fake price drop in the chart; falls
+    // back to the raw close if Yahoo didn't return an adjusted series
+    const adjCloses = result?.indicators?.adjclose?.[0]?.adjclose;
+    const closes = adjCloses || result?.indicators?.quote?.[0]?.close || [];
     let points = timestamps
       .map((t, i) => ({ t: t * 1000, c: closes[i] }))
       .filter((p) => p.c != null);
