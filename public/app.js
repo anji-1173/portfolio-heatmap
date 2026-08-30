@@ -405,4 +405,3 @@ async function loadChart(h, timeframe) {
 }
 
 init();
-
