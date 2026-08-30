@@ -108,6 +108,26 @@ function pointsForTimeframe(points, timeframe) {
   return timeframe === 'year' ? aggregateYearlyOHLC(points) : points;
 }
 
+// Yahoo's historical adjusted-close data is occasionally corrupted for
+// part of a ticker's history -- e.g. パーソルHD's 2006-2008 data came
+// back ~400x too high, which then squashes the entire chart's y-axis
+// and makes every legitimate recent point look like zero. Drop any
+// point whose price is wildly far (>15x either direction) from the
+// series median; a real stock essentially never moves that much
+// without a split, which adjclose is supposed to already account for.
+function dropPriceOutliers(points) {
+  const valid = points.filter((p) => p.c != null && p.c > 0);
+  if (valid.length < 5) return points;
+  const sorted = [...valid].sort((a, b) => a.c - b.c);
+  const median = sorted[Math.floor(sorted.length / 2)].c;
+  if (!median || median <= 0) return points;
+  return points.filter((p) => {
+    if (p.c == null || p.c <= 0) return false;
+    const ratio = p.c / median;
+    return ratio > 1 / 15 && ratio < 15;
+  });
+}
+
 async function fetchYahooChart(symbol, range, interval) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
     symbol
@@ -443,9 +463,15 @@ app.get('/api/history', async (req, res) => {
     const { range, interval } = RANGE_PRESETS[timeframe];
     const result =
       timeframe === 'year'
-        ? await withRetry(() =>
-            fetchYahooChartByPeriod(symbol, 0, Math.floor(Date.now() / 1000), interval)
-          )
+        ? await withRetry(() => {
+            const now = Math.floor(Date.now() / 1000);
+            const twentyYearsAgo = now - 20 * 365 * 24 * 3600;
+            // bounded start, not period1=0 ("since the beginning of
+            // time") -- for some tickers (パーソルHD) Yahoo's oldest
+            // adjusted-close data is badly wrong (off by 100x+), which
+            // period1=0 would happily include
+            return fetchYahooChartByPeriod(symbol, twentyYearsAgo, now, interval);
+          })
         : await withRetry(() => fetchYahooChart(symbol, range, interval));
     const timestamps = result?.timestamp || [];
     // adjusted close (accounts for stock splits/dividends) so a split
@@ -458,6 +484,7 @@ app.get('/api/history', async (req, res) => {
     let points = timestamps
       .map((t, i) => ({ t: t * 1000, c: adjCloses[i] ?? rawCloses[i] }))
       .filter((p) => p.c != null);
+    points = dropPriceOutliers(points);
     points = pointsForTimeframe(points, timeframe);
     const out = { symbol, timeframe, points };
     cacheSet(cacheKey, out);
