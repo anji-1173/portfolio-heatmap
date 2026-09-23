@@ -128,6 +128,16 @@ function dropPriceOutliers(points) {
   });
 }
 
+// same kind of Yahoo data glitch as dropPriceOutliers, but for a single
+// already-computed change percentage (e.g. meta.previousClose being
+// stale/wrong makes for an outrageous "day change"). A real single-day
+// move past +-80%, or a month past +-200%, essentially never happens for
+// a normal listed stock -- treat it as bad data rather than display it.
+function sanityPct(pct, limitAbs) {
+  if (pct == null || !Number.isFinite(pct)) return null;
+  return Math.abs(pct) > limitAbs ? null : pct;
+}
+
 async function fetchYahooChart(symbol, range, interval) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
     symbol
@@ -174,13 +184,16 @@ async function fetchQuote(symbol) {
 
   const price = meta.regularMarketPrice;
   const previousClose = meta.previousClose ?? meta.chartPreviousClose;
-  const dayChangePct =
-    price != null && previousClose ? ((price - previousClose) / previousClose) * 100 : null;
+  const dayChangePct = sanityPct(
+    price != null && previousClose ? ((price - previousClose) / previousClose) * 100 : null,
+    80
+  );
 
   let monthChangePct = null;
-  const validPairs = timestamps
+  let validPairs = timestamps
     .map((t, i) => ({ t, c: closes[i] }))
     .filter((p) => p.c != null);
+  validPairs = dropPriceOutliers(validPairs);
   if (validPairs.length > 1) {
     const lastT = validPairs[validPairs.length - 1].t;
     const targetT = lastT - 30 * 24 * 3600;
@@ -190,7 +203,7 @@ async function fetchQuote(symbol) {
     }
     const monthAgoClose = best.c;
     if (monthAgoClose) {
-      monthChangePct = ((price - monthAgoClose) / monthAgoClose) * 100;
+      monthChangePct = sanityPct(((price - monthAgoClose) / monthAgoClose) * 100, 200);
     }
   }
 
