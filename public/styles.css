@@ -194,6 +194,55 @@ main {
   color: var(--muted);
 }
 
+/* 統合予定: still trading, so keeps its up/down color, but gets an
+   amber dashed frame + badge so it stands out */
+.tile.status-merging {
+  outline: 2px dashed #e0a43c;
+  outline-offset: -2px;
+}
+
+/* 上場廃止: kept as a record, drawn in a striped purple that can't be
+   confused with up (green), down (red) or no-data (grey) */
+.tile.status-delisted {
+  background: repeating-linear-gradient(
+    45deg,
+    #3b3350,
+    #3b3350 6px,
+    #2f2a3f 6px,
+    #2f2a3f 12px
+  );
+  color: #cfc3e8;
+}
+
+.status-badge {
+  align-self: flex-start;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: #e0a43c;
+  color: #1a1a1a;
+}
+
+.tile.status-delisted .status-badge {
+  background: #9d8cc4;
+}
+
+.detail-panel .status-note {
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  border-left: 3px solid #e0a43c;
+  background: rgba(224, 164, 60, 0.1);
+}
+
+.detail-panel .status-note.status-delisted {
+  border-left-color: #9d8cc4;
+  background: rgba(157, 140, 196, 0.12);
+}
+
 .fund-table {
   flex-basis: 100%;
   width: 100%;
@@ -263,6 +312,7 @@ main {
   padding: 20px;
   overflow-y: auto;
   transition: transform 0.2s ease;
+  z-index: 100;
 }
 
 .detail-panel.hidden {

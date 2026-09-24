@@ -46,7 +46,9 @@ function chunk(arr, size) {
 }
 
 async function loadQuotesFor(type) {
-  const items = holdings.filter((h) => h.type === type && h.ticker);
+  const items = holdings.filter(
+    (h) => h.type === type && h.ticker && effectiveStatus(h) !== 'delisted'
+  );
   if (items.length === 0) return;
 
   if (type === 'crypto') {
@@ -83,15 +85,34 @@ async function loadQuotesFor(type) {
 // turned out to be unreliable from a hosted server. Sized by rank within
 // whichever group of tiles it's rendered alongside (see applySizeForTiles),
 // on a log scale so a ~$2T name and a ~$300B name don't look the same.
+// A holding marked 'merging' (e.g. a share-transfer integration) becomes
+// 'delisted' on its delistDate, so the tile flips on its own that day.
+function effectiveStatus(h) {
+  if (!h.status) return null;
+  if (h.status === 'merging' && h.delistDate) {
+    const today = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+    if (today >= h.delistDate) return 'delisted';
+  }
+  return h.status;
+}
+
+const STATUS_LABEL = { merging: '統合予定', delisted: '上場廃止' };
+
 function createTile(h) {
   const tile = document.createElement('div');
+  const status = effectiveStatus(h);
   tile.className = 'tile loading';
   tile.dataset.key = h.ticker || h.name;
   if (h.capUsdB) tile.dataset.cap = h.capUsdB;
+  if (status) {
+    tile.classList.add(`status-${status}`);
+    tile.dataset.status = status;
+  }
   tile.innerHTML = `
     <div class="symbol">${h.symbol || h.name}</div>
     <div class="name">${h.name}</div>
-    <div class="pct">--</div>
+    ${status ? `<div class="status-badge">${STATUS_LABEL[status]}</div>` : ''}
+    <div class="pct">${status === 'delisted' ? '取引終了' : '--'}</div>
   `;
   tile.addEventListener('click', () => openDetail(h));
   return tile;
@@ -201,6 +222,12 @@ function paintTiles() {
     const key = tile.dataset.key;
     const q = quoteData.get(key);
     const pctEl = tile.querySelector('.pct');
+    if (tile.dataset.status === 'delisted') {
+      tile.classList.remove('loading', 'nodata');
+      tile.style.background = '';
+      pctEl.textContent = '取引終了';
+      return;
+    }
     if (!q || q.error) {
       tile.classList.add('nodata');
       tile.classList.remove('loading');
@@ -269,9 +296,11 @@ async function openDetail(h) {
   const q = quoteData.get(key);
 
   const priceText =
-    q && q.price != null
-      ? `${q.price.toLocaleString()} ${q.currency || ''}`
-      : '価格取得不可';
+    effectiveStatus(h) === 'delisted'
+      ? '取引終了'
+      : q && q.price != null
+        ? `${q.price.toLocaleString()} ${q.currency || ''}`
+        : '価格取得不可';
   const dayPct = q?.dayChangePct;
   const monthPct = q?.monthChangePct;
   const asOfText = q?.asOf
@@ -287,6 +316,11 @@ async function openDetail(h) {
   detailContent.innerHTML = `
     <h2>${h.name}</h2>
     <div class="sub">${h.symbol || ''} ・ ${h.accounts.join(' / ')}</div>
+    ${
+      effectiveStatus(h)
+        ? `<div class="status-note status-${effectiveStatus(h)}">【${STATUS_LABEL[effectiveStatus(h)]}】${h.statusNote || ''}</div>`
+        : ''
+    }
     <div class="price-row">${priceText}</div>
     ${asOfText ? `<div class="as-of">${asOfText} 時点</div>` : ''}
     <div class="change">
