@@ -183,7 +183,22 @@ async function fetchQuote(symbol) {
   const timestamps = result.timestamp || [];
 
   const price = meta.regularMarketPrice;
-  const previousClose = meta.previousClose ?? meta.chartPreviousClose;
+  // Previous trading day's close, taken from the daily bars themselves.
+  // meta.previousClose is often missing on a multi-day range request,
+  // and the old fallback, meta.chartPreviousClose, is the close from
+  // *before the whole 2-month window* -- so "day change" was silently
+  // showing a ~2-month change (e.g. MRNA +214%).
+  const gmtoffset = meta.gmtoffset || 0;
+  const dayKey = (sec) => Math.floor((sec + gmtoffset) / 86400);
+  const latestKey = meta.regularMarketTime ? dayKey(meta.regularMarketTime) : null;
+  let previousClose = null;
+  for (let i = timestamps.length - 1; i >= 0; i--) {
+    if (rawCloses[i] == null) continue;
+    if (latestKey != null && dayKey(timestamps[i]) >= latestKey) continue;
+    previousClose = rawCloses[i];
+    break;
+  }
+  if (previousClose == null) previousClose = meta.previousClose ?? null;
   const dayChangePct = sanityPct(
     price != null && previousClose ? ((price - previousClose) / previousClose) * 100 : null,
     80
