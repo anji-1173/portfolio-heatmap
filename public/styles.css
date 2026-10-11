@@ -228,6 +228,25 @@ main {
   background: #9d8cc4;
 }
 
+/* 売却済み: past holding kept as history, a muted slate-blue that's
+   distinct from up (green), down (red), no-data (grey) and delisted
+   (purple stripes) */
+.tile.status-sold {
+  background: #263646;
+  color: #9fb4c6;
+  opacity: 0.85;
+}
+
+.tile.status-sold .status-badge {
+  background: #7fa3b8;
+  color: #10202c;
+}
+
+.detail-panel .status-note.status-sold {
+  border-left-color: #7fa3b8;
+  background: rgba(127, 163, 184, 0.12);
+}
+
 .detail-panel .status-note {
   font-size: 12px;
   line-height: 1.6;

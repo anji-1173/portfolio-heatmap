@@ -96,7 +96,7 @@ function effectiveStatus(h) {
   return h.status;
 }
 
-const STATUS_LABEL = { merging: '統合予定', delisted: '上場廃止' };
+const STATUS_LABEL = { merging: '統合予定', delisted: '上場廃止', sold: '売却済み' };
 
 function createTile(h) {
   const tile = document.createElement('div');
@@ -228,6 +228,15 @@ function paintTiles() {
       pctEl.textContent = '取引終了';
       return;
     }
+    // sold: kept as history in its own color, never green/red, but the
+    // price/change is still shown for reference
+    if (tile.dataset.status === 'sold') {
+      tile.classList.remove('loading', 'nodata');
+      tile.style.background = '';
+      const soldPct = q && !q.error ? (currentMetric === 'day' ? q.dayChangePct : q.monthChangePct) : null;
+      pctEl.textContent = soldPct == null ? '' : `${soldPct >= 0 ? '+' : ''}${soldPct.toFixed(1)}%`;
+      return;
+    }
     if (!q || q.error) {
       tile.classList.add('nodata');
       tile.classList.remove('loading');
@@ -243,7 +252,7 @@ function paintTiles() {
 }
 
 function renderFundTable() {
-  const items = holdings.filter((h) => h.type === 'fund');
+  const items = holdings.filter((h) => h.type === 'fund' || h.type === 'bond');
 
   // group by the account (broker) that holds each fund
   const byAccount = new Map();
@@ -258,6 +267,13 @@ function renderFundTable() {
     .map(([account, funds]) => {
       const nameRows = funds
         .map((h) => {
+          if (h.type === 'bond') {
+            return `<tr>
+            <td class="fund-name">${h.name}</td>
+            <td class="fund-account">${account}</td>
+            <td class="fund-account">債券(満期まで保有)</td>
+          </tr>`;
+          }
           const link = h.fundCode
             ? `https://finance.yahoo.co.jp/quote/${encodeURIComponent(h.fundCode)}/chart`
             : `https://www.google.com/search?q=${encodeURIComponent(`${h.name} 基準価額`)}`;
@@ -275,12 +291,12 @@ function renderFundTable() {
 
   heatmapEl.innerHTML = `
     <p class="fund-intro">
-      投資信託(ファンド)は、株や暗号資産のようなリアルタイム価格を毎日は公表していないため、
-      ここでは「何を」「どの口座で」保有しているかの一覧と、基準価額のチャートへのリンクを表示しています。
+      投資信託(ファンド)と債券は、株や暗号資産のようなリアルタイム価格を毎日は公表していないため、
+      ここでは「何を」「どの口座で」保有しているかの一覧と、ファンドの基準価額のチャートへのリンクを表示しています。
     </p>
     <table class="fund-table">
       <thead>
-        <tr><th>ファンド名</th><th>保有口座</th><th>詳細</th></tr>
+        <tr><th>銘柄名</th><th>保有口座</th><th>詳細</th></tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>
