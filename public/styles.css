@@ -214,8 +214,24 @@ main {
   color: #cfc3e8;
 }
 
+/* code + status badge share one row, so a status tile has the same three
+   lines (code / name / change) as any other and nothing gets clipped */
+.tile-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tile-head .symbol {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .status-badge {
-  align-self: flex-start;
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 9px;
   font-weight: 700;
   padding: 1px 5px;
@@ -233,8 +249,7 @@ main {
    (purple stripes) */
 .tile.status-sold {
   background: #263646;
-  color: #9fb4c6;
-  opacity: 0.85;
+  color: #d3e0ea;
 }
 
 .tile.status-sold .status-badge {

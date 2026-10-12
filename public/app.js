@@ -109,9 +109,11 @@ function createTile(h) {
     tile.dataset.status = status;
   }
   tile.innerHTML = `
-    <div class="symbol">${h.symbol || h.name}</div>
+    <div class="tile-head">
+      <span class="symbol">${h.symbol || h.name}</span>
+      ${status ? `<span class="status-badge">${STATUS_LABEL[status]}</span>` : ''}
+    </div>
     <div class="name">${h.name}</div>
-    ${status ? `<div class="status-badge">${STATUS_LABEL[status]}</div>` : ''}
     <div class="pct">${status === 'delisted' ? '取引終了' : '--'}</div>
   `;
   tile.addEventListener('click', () => openDetail(h));
