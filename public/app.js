@@ -318,7 +318,9 @@ async function openDetail(h) {
       ? '取引終了'
       : q && q.price != null
         ? `${q.price.toLocaleString()} ${q.currency || ''}`
-        : '価格取得不可';
+        : h.sale
+          ? `売却時 ${salePriceText(h.sale)}`
+          : '価格取得不可';
   const dayPct = q?.dayChangePct;
   const monthPct = q?.monthChangePct;
   const asOfText = q?.asOf
@@ -354,6 +356,7 @@ async function openDetail(h) {
       <button class="timeframe" data-timeframe="year">年足</button>
     </div>
     <canvas id="detailChart"></canvas>
+    <p class="chart-note" id="chartNote"></p>
     <div class="section-title">${h.type === 'crypto' ? 'この暗号資産について' : '企業概要'}</div>
     <div class="summary" id="profileText">${companyOverviewText(h)}</div>
     ${historyHtml(h)}
@@ -372,12 +375,29 @@ async function openDetail(h) {
 // Purchase / dividend log from broker notices. Only dates and per-share
 // figures (public info) are kept -- never share counts or amounts, since
 // this repository is public.
+function currencyUnit(c) {
+  return c === 'USD' ? '米ドル' : c === 'JPY' ? '円' : c;
+}
+
+// per-share sale price, e.g. "31.02 米ドル"
+function salePriceText(sale) {
+  const v = Number(sale.perShare);
+  const digits = sale.currency === 'JPY' ? 0 : 2;
+  return `${v.toLocaleString('ja-JP', { minimumFractionDigits: digits, maximumFractionDigits: digits })} ${currencyUnit(sale.currency)}`;
+}
+
 function historyHtml(h) {
   const jp = (d) => `${Number(d.slice(0, 4))}年${Number(d.slice(5, 7))}月${Number(d.slice(8, 10))}日`;
   const rows = [];
   if (h.boughtOn) rows.push(`<li>${jp(h.boughtOn)} 購入</li>`);
+  if (h.sale) {
+    rows.push(
+      `<li>${jp(h.sale.date)} 売却${h.sale.reason ? `(${h.sale.reason})` : ''}` +
+        ` 1株あたり ${salePriceText(h.sale)}</li>`
+    );
+  }
   (h.dividends || []).forEach((d) => {
-    const unit = d.currency === 'USD' ? '米ドル' : d.currency === 'JPY' ? '円' : d.currency;
+    const unit = currencyUnit(d.currency);
     rows.push(
       `<li>${jp(d.payDate)} 配当 1株あたり ${d.perShare} ${unit}` +
         `${d.recordDate ? `(基準日 ${jp(d.recordDate)})` : ''}</li>`
@@ -418,12 +438,13 @@ const MARKER_STYLE = {
   buy: { band: 'rgba(79,209,197,0.18)', line: '#4fd1c5', text: '#bff3ee', edge: 'start' },
 };
 
-function windowMarker(points, timeframe, fromDate, toDate, kind, verb) {
+function windowMarker(points, timeframe, fromDate, toDate, kind, verb, extra = '') {
   if (points.length === 0) return null;
   const startMs = Date.parse(`${fromDate}T00:00:00+09:00`);
   const endMs = Date.parse(`${toDate}T23:59:59+09:00`);
   const fmt = (d) => `${Number(d.slice(5, 7))}/${Number(d.slice(8, 10))}`;
-  const label = fromDate === toDate ? `${verb} ${fmt(fromDate)}` : `${verb} ${fmt(fromDate)}〜${fmt(toDate)}`;
+  const label =
+    (fromDate === toDate ? `${verb} ${fmt(fromDate)}` : `${verb} ${fmt(fromDate)}〜${fmt(toDate)}`) + extra;
   let from = -1;
   let to = -1;
   if (timeframe === 'year') {
@@ -449,6 +470,11 @@ function windowMarker(points, timeframe, fromDate, toDate, kind, verb) {
       // bar that the window falls into, i.e. the first one after it starts
       const i = points.findIndex((p) => p.t >= startMs);
       if (i >= 0) from = to = i;
+      // a stock that stopped trading (e.g. cashed out in a buyout) has no
+      // bars after its last trading day, so mark the final bar
+      else if (startMs - points[points.length - 1].t < 14 * 86400000) {
+        from = to = points.length - 1;
+      }
     }
   }
   return from < 0 ? null : { from, to, label, kind };
@@ -457,7 +483,8 @@ function windowMarker(points, timeframe, fromDate, toDate, kind, verb) {
 function chartMarkersFor(h, points, timeframe) {
   const out = [];
   if (h.status === 'sold' && h.soldAfter && h.soldBy) {
-    out.push(windowMarker(points, timeframe, h.soldAfter, h.soldBy, 'sell', '売却'));
+    const price = h.sale ? ` ${salePriceText(h.sale)}` : '';
+    out.push(windowMarker(points, timeframe, h.soldAfter, h.soldBy, 'sell', '売却', price));
   }
   if (h.boughtOn) {
     out.push(windowMarker(points, timeframe, h.boughtOn, h.boughtOn, 'buy', '購入'));
@@ -519,8 +546,12 @@ async function loadChart(h, timeframe) {
       const data = await r.json();
       points = data.points || [];
     } else {
+      // last trading day of a sold-in-buyout / delisted holding, so the
+      // server can still find its chart once the symbol stops trading
+      const until = h.sale?.date || h.delistDate || (h.status === 'sold' ? h.soldBy : '');
       const r = await fetch(
-        `/api/history?symbol=${encodeURIComponent(h.ticker)}&timeframe=${timeframe}`
+        `/api/history?symbol=${encodeURIComponent(h.ticker)}&timeframe=${timeframe}` +
+          (until ? `&until=${until}` : '')
       );
       const data = await r.json();
       points = data.points || [];
@@ -531,6 +562,16 @@ async function loadChart(h, timeframe) {
       detailChart.destroy();
       detailChart = null;
     }
+    const note = document.getElementById('chartNote');
+    if (note) {
+      note.textContent =
+        points.length === 0
+          ? effectiveStatus(h)
+            ? '値動きのデータを取得できませんでした。上場廃止になった銘柄は、データの配信が終わっていることがあります。'
+            : '値動きのデータを取得できませんでした。'
+          : '';
+    }
+    ctx.style.display = points.length === 0 ? 'none' : '';
     if (points.length === 0) return;
     const markers = chartMarkersFor(h, points, timeframe);
 

@@ -77,6 +77,15 @@ const RANGE_PRESETS = {
   year: { range: '20y', interval: '1wk' },
 };
 
+// the same spans as RANGE_PRESETS, in seconds, for the explicit
+// start/end-date form of the query
+const PERIOD_SPAN_SEC = {
+  hour: 7 * 86400,
+  day: 92 * 86400,
+  week: 2 * 366 * 86400,
+  month: 10 * 366 * 86400,
+};
+
 // build one OHLC bar per calendar year from a daily/near-daily close
 // series -- this is how a brokerage's 年足 (yearly candle chart) is
 // constructed: open = first close of the year, high/low = the extremes
@@ -483,22 +492,47 @@ app.get('/api/history', async (req, res) => {
   const timeframe = RANGE_PRESETS[req.query.timeframe] ? req.query.timeframe : 'day';
   if (!symbol) return res.status(400).json({ error: 'symbol required' });
 
-  const cacheKey = `history:${symbol}:${timeframe}`;
+  // for a holding that stopped trading (sold in a buyout / delisted) the
+  // client passes the last day it traded, so the chart can still be
+  // drawn up to that day if the open-ended "latest N months" query no
+  // longer returns anything for the symbol
+  const untilRaw = String(req.query.until || '');
+  const until = /^\d{4}-\d{2}-\d{2}$/.test(untilRaw) ? untilRaw : '';
+
+  const cacheKey = `history:${symbol}:${timeframe}:${until}`;
   const cached = cacheGet(cacheKey, 5 * 60_000);
   if (cached) return res.json(cached);
 
   try {
     const { range, interval } = RANGE_PRESETS[timeframe];
-    const result =
-      timeframe === 'year'
-        ? await withRetry(() => {
-            const now = Math.floor(Date.now() / 1000);
-            // full history (period1=0) -- safe now that dropPriceOutliers
-            // scrubs any badly-wrong old data (like パーソルHD's) instead
-            // of just excluding old data by date
-            return fetchYahooChartByPeriod(symbol, 0, now, interval);
-          })
-        : await withRetry(() => fetchYahooChart(symbol, range, interval));
+    const byPeriod = (endSec) =>
+      withRetry(() =>
+        fetchYahooChartByPeriod(
+          symbol,
+          // full history (period1=0) for the yearly chart -- safe now
+          // that dropPriceOutliers scrubs any badly-wrong old data (like
+          // パーソルHD's) instead of just excluding old data by date
+          timeframe === 'year' ? 0 : endSec - PERIOD_SPAN_SEC[timeframe],
+          endSec,
+          interval
+        )
+      );
+    const nowSec = Math.floor(Date.now() / 1000);
+    let result = null;
+    try {
+      result =
+        timeframe === 'year'
+          ? await byPeriod(nowSec)
+          : await withRetry(() => fetchYahooChart(symbol, range, interval));
+    } catch (e) {
+      if (!until) throw e;
+    }
+    if (until && !(result?.timestamp || []).length) {
+      // a week of slack past the last trading day, so the final bars and
+      // the sale marker sit inside the window
+      const endSec = Math.floor(Date.parse(`${until}T23:59:59Z`) / 1000) + 7 * 86400;
+      result = await byPeriod(Math.min(endSec, nowSec));
+    }
     const timestamps = result?.timestamp || [];
     // adjusted close (accounts for stock splits/dividends) so a split
     // doesn't show up as a sudden fake price drop in the chart. Yahoo

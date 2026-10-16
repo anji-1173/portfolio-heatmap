@@ -418,3 +418,13 @@ main {
 canvas#detailChart {
   max-height: 180px;
 }
+
+.chart-note {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.chart-note:empty {
+  display: none;
+}
