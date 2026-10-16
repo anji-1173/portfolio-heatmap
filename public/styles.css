@@ -257,6 +257,14 @@ main {
   color: #10202c;
 }
 
+.detail-panel .history-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #cfd3da;
+}
+
 .detail-panel .status-note.status-sold {
   border-left-color: #7fa3b8;
   background: rgba(127, 163, 184, 0.12);

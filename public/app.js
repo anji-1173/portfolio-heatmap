@@ -356,6 +356,7 @@ async function openDetail(h) {
     <canvas id="detailChart"></canvas>
     <div class="section-title">${h.type === 'crypto' ? 'この暗号資産について' : '企業概要'}</div>
     <div class="summary" id="profileText">${companyOverviewText(h)}</div>
+    ${historyHtml(h)}
   `;
 
   if (detailChart) {
@@ -366,6 +367,24 @@ async function openDetail(h) {
   if (h.ticker) {
     loadChart(h, currentTimeframe);
   }
+}
+
+// Purchase / dividend log from broker notices. Only dates and per-share
+// figures (public info) are kept -- never share counts or amounts, since
+// this repository is public.
+function historyHtml(h) {
+  const jp = (d) => `${Number(d.slice(0, 4))}年${Number(d.slice(5, 7))}月${Number(d.slice(8, 10))}日`;
+  const rows = [];
+  if (h.boughtOn) rows.push(`<li>${jp(h.boughtOn)} 購入</li>`);
+  (h.dividends || []).forEach((d) => {
+    const unit = d.currency === 'USD' ? '米ドル' : d.currency === 'JPY' ? '円' : d.currency;
+    rows.push(
+      `<li>${jp(d.payDate)} 配当 1株あたり ${d.perShare} ${unit}` +
+        `${d.recordDate ? `(基準日 ${jp(d.recordDate)})` : ''}</li>`
+    );
+  });
+  if (rows.length === 0) return '';
+  return `<div class="section-title">取引・配当の記録</div><ul class="history-list">${rows.join('')}</ul>`;
 }
 
 // company overviews are shipped as static text in holdings.json rather
@@ -388,17 +407,23 @@ detailContent.addEventListener('click', (e) => {
   loadChart(currentDetailHolding, currentTimeframe);
 });
 
-// Where a sold holding's sale falls on the chart. The asset sheet is a
-// monthly snapshot, so we only know it was sold between soldAfter (last
-// snapshot still holding it) and soldBy (first snapshot without it):
-// returns the index range of points in that window, or {before:true}
-// if the whole chart is later than the sale (e.g. the 5-day hour chart).
-function saleMarkerFor(h, points, timeframe) {
-  if (h.status !== 'sold' || !h.soldAfter || !h.soldBy || points.length === 0) return null;
-  const startMs = Date.parse(`${h.soldAfter}T00:00:00+09:00`);
-  const endMs = Date.parse(`${h.soldBy}T23:59:59+09:00`);
+// Events to mark on a holding's price chart:
+// - sale: the asset sheet is a monthly snapshot, so a sale is only known
+//   to fall between soldAfter (last snapshot still holding it) and soldBy
+//   (first snapshot without it); both are the same day when the exact
+//   date is known (e.g. a buyout notice from the broker)
+// - purchase: boughtOn, from a trade report
+const MARKER_STYLE = {
+  sell: { band: 'rgba(127,163,184,0.22)', line: '#7fa3b8', text: '#cfe0ec', edge: 'end' },
+  buy: { band: 'rgba(79,209,197,0.18)', line: '#4fd1c5', text: '#bff3ee', edge: 'start' },
+};
+
+function windowMarker(points, timeframe, fromDate, toDate, kind, verb) {
+  if (points.length === 0) return null;
+  const startMs = Date.parse(`${fromDate}T00:00:00+09:00`);
+  const endMs = Date.parse(`${toDate}T23:59:59+09:00`);
   const fmt = (d) => `${Number(d.slice(5, 7))}/${Number(d.slice(8, 10))}`;
-  const label = `売却 ${fmt(h.soldAfter)}〜${fmt(h.soldBy)}`;
+  const label = fromDate === toDate ? `${verb} ${fmt(fromDate)}` : `${verb} ${fmt(fromDate)}〜${fmt(toDate)}`;
   let from = -1;
   let to = -1;
   if (timeframe === 'year') {
@@ -412,7 +437,7 @@ function saleMarkerFor(h, points, timeframe) {
       }
     });
   } else {
-    if (endMs < points[0].t) return { before: true, label };
+    if (endMs < points[0].t) return { before: true, label, kind };
     points.forEach((p, i) => {
       if (p.t >= startMs && p.t <= endMs) {
         if (from < 0) from = i;
@@ -426,45 +451,60 @@ function saleMarkerFor(h, points, timeframe) {
       if (i >= 0) from = to = i;
     }
   }
-  return from < 0 ? null : { from, to, label };
+  return from < 0 ? null : { from, to, label, kind };
+}
+
+function chartMarkersFor(h, points, timeframe) {
+  const out = [];
+  if (h.status === 'sold' && h.soldAfter && h.soldBy) {
+    out.push(windowMarker(points, timeframe, h.soldAfter, h.soldBy, 'sell', '売却'));
+  }
+  if (h.boughtOn) {
+    out.push(windowMarker(points, timeframe, h.boughtOn, h.boughtOn, 'buy', '購入'));
+  }
+  return out.filter(Boolean);
 }
 
 const saleMarkerPlugin = {
   id: 'saleMarker',
   afterDatasetsDraw(chart, _args, opts) {
-    const m = opts && opts.marker;
-    if (!m) return;
+    const markers = (opts && opts.markers) || [];
+    if (markers.length === 0) return;
     const { ctx, chartArea, scales } = chart;
     const { top, bottom, left, right } = chartArea;
-    ctx.save();
-    ctx.font = '11px sans-serif';
-    ctx.textBaseline = 'top';
-    if (m.before) {
-      ctx.fillStyle = '#9fb4c6';
-      ctx.fillText(`◀ ${m.label}(この期間より前)`, left + 4, top + 4);
-      ctx.restore();
-      return;
-    }
     const x = scales.x;
     const n = chart.data.labels.length;
     const step = n > 1 ? Math.abs(x.getPixelForValue(1) - x.getPixelForValue(0)) : 12;
     const half = Math.max(step / 2, 3);
-    const x0 = Math.max(left, x.getPixelForValue(m.from) - half);
-    const x1 = Math.min(right, x.getPixelForValue(m.to) + half);
-    ctx.fillStyle = 'rgba(127,163,184,0.22)';
-    ctx.fillRect(x0, top, x1 - x0, bottom - top);
-    ctx.strokeStyle = '#7fa3b8';
-    ctx.setLineDash([4, 3]);
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(x1, top);
-    ctx.lineTo(x1, bottom);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle = '#cfe0ec';
-    const tw = ctx.measureText(m.label).width;
-    const tx = x1 + 4 + tw > right ? x0 - 4 - tw : x1 + 4;
-    ctx.fillText(m.label, Math.max(left, tx), top + 4);
+    ctx.save();
+    ctx.font = '11px sans-serif';
+    ctx.textBaseline = 'top';
+    markers.forEach((m, k) => {
+      const st = MARKER_STYLE[m.kind];
+      const ty = top + 4 + k * 15;
+      if (m.before) {
+        ctx.fillStyle = st.text;
+        ctx.fillText(`◀ ${m.label}(この期間より前)`, left + 4, ty);
+        return;
+      }
+      const x0 = Math.max(left, x.getPixelForValue(m.from) - half);
+      const x1 = Math.min(right, x.getPixelForValue(m.to) + half);
+      ctx.fillStyle = st.band;
+      ctx.fillRect(x0, top, x1 - x0, bottom - top);
+      const lx = st.edge === 'end' ? x1 : x0;
+      ctx.strokeStyle = st.line;
+      ctx.setLineDash([4, 3]);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(lx, top);
+      ctx.lineTo(lx, bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = st.text;
+      const tw = ctx.measureText(m.label).width;
+      const tx = x1 + 4 + tw > right ? x0 - 4 - tw : x1 + 4;
+      ctx.fillText(m.label, Math.max(left, tx), ty);
+    });
     ctx.restore();
   },
 };
@@ -492,7 +532,7 @@ async function loadChart(h, timeframe) {
       detailChart = null;
     }
     if (points.length === 0) return;
-    const marker = saleMarkerFor(h, points, timeframe);
+    const markers = chartMarkersFor(h, points, timeframe);
 
     // 年足 (yearly): one open/high/low/close candle per year, like a
     // brokerage's yearly chart -- not a line, since a line drawn through
@@ -523,7 +563,7 @@ async function loadChart(h, timeframe) {
           ],
         },
         options: {
-          plugins: { legend: { display: false }, saleMarker: { marker } },
+          plugins: { legend: { display: false }, saleMarker: { markers } },
           scales: {
             x: {
               grouped: false,
@@ -564,7 +604,7 @@ async function loadChart(h, timeframe) {
         ],
       },
       options: {
-        plugins: { legend: { display: false }, saleMarker: { marker } },
+        plugins: { legend: { display: false }, saleMarker: { markers } },
         scales: {
           x: {
             display: true,
