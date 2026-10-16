@@ -472,7 +472,7 @@ function windowMarker(points, timeframe, fromDate, toDate, kind, verb, extra = '
       if (i >= 0) from = to = i;
       // a stock that stopped trading (e.g. cashed out in a buyout) has no
       // bars after its last trading day, so mark the final bar
-      else if (startMs - points[points.length - 1].t < 14 * 86400000) {
+      else if (startMs - points[points.length - 1].t < 40 * 86400000) {
         from = to = points.length - 1;
       }
     }
@@ -536,9 +536,17 @@ const saleMarkerPlugin = {
   },
 };
 
+const TIMEFRAME_LABEL = { hour: '時間足', day: '日足', week: '週足', month: '月足', year: '年足' };
+
+// bumped on every chart request, so a slow reply for a timeframe the
+// user already switched away from can't overwrite the newer chart
+let chartRequestId = 0;
+
 async function loadChart(h, timeframe) {
+  const requestId = ++chartRequestId;
   try {
     let points = [];
+    let fallback = null;
     if (h.type === 'crypto') {
       const r = await fetch(
         `/api/crypto-history?id=${encodeURIComponent(h.ticker)}&timeframe=${timeframe}`
@@ -555,7 +563,9 @@ async function loadChart(h, timeframe) {
       );
       const data = await r.json();
       points = data.points || [];
+      fallback = data.fallback || null;
     }
+    if (requestId !== chartRequestId) return;
     const ctx = document.getElementById('detailChart');
     if (!ctx) return;
     if (detailChart) {
@@ -569,7 +579,11 @@ async function loadChart(h, timeframe) {
           ? effectiveStatus(h)
             ? '値動きのデータを取得できませんでした。上場廃止になった銘柄は、データの配信が終わっていることがあります。'
             : '値動きのデータを取得できませんでした。'
-          : '';
+          : fallback === 'month' && timeframe === 'year'
+            ? '細かい値動きのデータが配信されていないため、月ごとのデータ(月足)から年足を組み立てて表示しています。'
+            : fallback === 'month' && timeframe !== 'month'
+              ? `${TIMEFRAME_LABEL[timeframe]}のデータが配信されていないため、月ごとの値動き(月足のデータ)で表示しています。`
+              : '';
     }
     ctx.style.display = points.length === 0 ? 'none' : '';
     if (points.length === 0) return;
@@ -638,7 +652,9 @@ async function loadChart(h, timeframe) {
             data: points.map((p) => p.c),
             borderColor: '#5b8def',
             backgroundColor: 'rgba(91,141,239,0.1)',
-            pointRadius: 0,
+            // a sparse series (monthly bars standing in for daily) gets
+            // visible dots so it doesn't read as one smooth curve
+            pointRadius: points.length < 40 ? 2.5 : 0,
             tension: 0.15,
             fill: true,
           },

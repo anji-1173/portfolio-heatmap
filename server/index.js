@@ -147,6 +147,21 @@ function sanityPct(pct, limitAbs) {
   return Math.abs(pct) > limitAbs ? null : pct;
 }
 
+// closes out of a Yahoo chart result. Adjusted close (accounts for
+// stock splits/dividends) so a split doesn't show up as a sudden fake
+// price drop in the chart. Yahoo sometimes leaves gaps in the adjclose
+// series for part of a ticker's history (e.g. around a recent split), so
+// fall back to the raw close per-point rather than dropping those dates
+function closePoints(result) {
+  const timestamps = result?.timestamp || [];
+  const adjCloses = result?.indicators?.adjclose?.[0]?.adjclose || [];
+  const rawCloses = result?.indicators?.quote?.[0]?.close || [];
+  const points = timestamps
+    .map((t, i) => ({ t: t * 1000, c: adjCloses[i] ?? rawCloses[i] }))
+    .filter((p) => p.c != null);
+  return dropPriceOutliers(points);
+}
+
 async function fetchYahooChart(symbol, range, interval) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
     symbol
@@ -505,20 +520,21 @@ app.get('/api/history', async (req, res) => {
 
   try {
     const { range, interval } = RANGE_PRESETS[timeframe];
-    const byPeriod = (endSec) =>
+    const byPeriod = (endSec, iv = interval, startSec = null) =>
       withRetry(() =>
         fetchYahooChartByPeriod(
           symbol,
           // full history (period1=0) for the yearly chart -- safe now
           // that dropPriceOutliers scrubs any badly-wrong old data (like
           // パーソルHD's) instead of just excluding old data by date
-          timeframe === 'year' ? 0 : endSec - PERIOD_SPAN_SEC[timeframe],
+          startSec ?? (timeframe === 'year' ? 0 : endSec - PERIOD_SPAN_SEC[timeframe]),
           endSec,
-          interval
+          iv
         )
       );
     const nowSec = Math.floor(Date.now() / 1000);
     let result = null;
+    let firstError = null;
     try {
       result =
         timeframe === 'year'
@@ -526,27 +542,51 @@ app.get('/api/history', async (req, res) => {
           : await withRetry(() => fetchYahooChart(symbol, range, interval));
     } catch (e) {
       if (!until) throw e;
+      firstError = e;
     }
     if (until && !(result?.timestamp || []).length) {
       // a week of slack past the last trading day, so the final bars and
       // the sale marker sit inside the window
       const endSec = Math.floor(Date.parse(`${until}T23:59:59Z`) / 1000) + 7 * 86400;
-      result = await byPeriod(Math.min(endSec, nowSec));
+      try {
+        result = await byPeriod(Math.min(endSec, nowSec));
+      } catch (e) {
+        result = null;
+      }
     }
-    const timestamps = result?.timestamp || [];
-    // adjusted close (accounts for stock splits/dividends) so a split
-    // doesn't show up as a sudden fake price drop in the chart. Yahoo
-    // sometimes leaves gaps in the adjclose series for part of a
-    // ticker's history (e.g. around a recent split), so fall back to
-    // the raw close per-point rather than dropping those dates entirely
-    const adjCloses = result?.indicators?.adjclose?.[0]?.adjclose || [];
-    const rawCloses = result?.indicators?.quote?.[0]?.close || [];
-    let points = timestamps
-      .map((t, i) => ({ t: t * 1000, c: adjCloses[i] ?? rawCloses[i] }))
-      .filter((p) => p.c != null);
-    points = dropPriceOutliers(points);
+    let points = closePoints(result);
+    let fallback = null;
+
+    // Once a stock has stopped trading (WBD after its buyout) Yahoo was
+    // seen to keep serving only the monthly bars -- the daily/weekly
+    // queries come back empty. Rather than leave the chart blank, draw
+    // the same period from those monthly bars and say so in the UI.
+    if (until && points.length < 3) {
+      let monthly = [];
+      if (timeframe === 'year') {
+        try {
+          monthly = closePoints(await byPeriod(nowSec, '1mo', 0));
+        } catch (e) {
+          /* fall through to the bounded range below */
+        }
+      }
+      if (monthly.length < 3) {
+        try {
+          monthly = closePoints(await withRetry(() => fetchYahooChart(symbol, '10y', '1mo')));
+        } catch (e) {
+          monthly = [];
+        }
+      }
+      if (monthly.length >= 2) {
+        const keep = { hour: 13, day: 13, week: 25 }[timeframe];
+        points = keep ? monthly.slice(-keep) : monthly;
+        fallback = 'month';
+      }
+    }
+    if (points.length === 0 && firstError) throw firstError;
+
     points = pointsForTimeframe(points, timeframe);
-    const out = { symbol, timeframe, points };
+    const out = { symbol, timeframe, points, ...(fallback ? { fallback } : {}) };
     cacheSet(cacheKey, out);
     res.json(out);
   } catch (e) {
