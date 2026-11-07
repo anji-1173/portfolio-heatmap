@@ -390,6 +390,10 @@ function historyHtml(h) {
   const jp = (d) => `${Number(d.slice(0, 4))}年${Number(d.slice(5, 7))}月${Number(d.slice(8, 10))}日`;
   const rows = [];
   if (h.boughtOn) rows.push(`<li>${jp(h.boughtOn)} 購入</li>`);
+  // bought sometime between two monthly asset-sheet snapshots
+  if (h.boughtAfter && h.boughtBy) {
+    rows.push(`<li>${jp(h.boughtAfter)}〜${jp(h.boughtBy)}の間に購入(資産表は月1回の記録のため、購入日はこの範囲のどこか)</li>`);
+  }
   if (h.sale) {
     rows.push(
       `<li>${jp(h.sale.date)} 売却${h.sale.reason ? `(${h.sale.reason})` : ''}` +
@@ -432,7 +436,8 @@ detailContent.addEventListener('click', (e) => {
 //   to fall between soldAfter (last snapshot still holding it) and soldBy
 //   (first snapshot without it); both are the same day when the exact
 //   date is known (e.g. a buyout notice from the broker)
-// - purchase: boughtOn, from a trade report
+// - purchase: boughtOn, from a trade report; or boughtAfter..boughtBy
+//   when it only shows up between two monthly asset-sheet snapshots
 const MARKER_STYLE = {
   sell: { band: 'rgba(127,163,184,0.22)', line: '#7fa3b8', text: '#cfe0ec', edge: 'end' },
   buy: { band: 'rgba(79,209,197,0.18)', line: '#4fd1c5', text: '#bff3ee', edge: 'start' },
@@ -488,6 +493,8 @@ function chartMarkersFor(h, points, timeframe) {
   }
   if (h.boughtOn) {
     out.push(windowMarker(points, timeframe, h.boughtOn, h.boughtOn, 'buy', '購入'));
+  } else if (h.boughtAfter && h.boughtBy) {
+    out.push(windowMarker(points, timeframe, h.boughtAfter, h.boughtBy, 'buy', '購入'));
   }
   return out.filter(Boolean);
 }
